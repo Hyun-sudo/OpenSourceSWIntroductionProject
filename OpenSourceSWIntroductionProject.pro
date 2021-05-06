@@ -9,14 +9,14 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    mainwindow.cpp
+    Dialog01.cpp \
+    main.cpp
 
 HEADERS += \
-    mainwindow.h
+    Dialog01.h
 
 FORMS += \
-    mainwindow.ui
+    Dialog01.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
