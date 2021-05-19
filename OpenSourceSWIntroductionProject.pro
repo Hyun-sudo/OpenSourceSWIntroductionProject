@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++14
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -10,10 +10,12 @@ CONFIG += c++11
 
 SOURCES += \
     Dialog01.cpp \
+    RGBController/RGBController.cpp \
     main.cpp
 
 HEADERS += \
-    Dialog01.h
+    Dialog01.h \
+    RGBController/RGBContoller.h
 
 FORMS += \
     Dialog01.ui
