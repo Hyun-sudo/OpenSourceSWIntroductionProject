@@ -587,3 +587,638 @@ void RGBController::ReadDeviceDescription(unsigned char *data_buf, unsigned int 
     // 색 설정
     SetupColors();
 }
+
+unsigned char * RGBController::GetModeDescription(int mode)
+{
+    unsigned int data_ptr = 0;
+    unsigned int data_size = 0;
+
+    unsigned short mode_name_len;
+    unsigned short mode_num_colors;
+
+    // 데이터 크기 계산
+    mode_name_len   = strlen(modes[mode].name.c_str()) + 1;
+    mode_num_colors = modes[mode].colors.size();
+
+    data_size += sizeof(data_size);
+    data_size += sizeof(mode);
+    data_size += sizeof(mode_name_len);
+    data_size += mode_name_len;
+    data_size += sizeof(modes[mode].value);
+    data_size += sizeof(modes[mode].flags);
+    data_size += sizeof(modes[mode].speed_min);
+    data_size += sizeof(modes[mode].speed_max);
+    data_size += sizeof(modes[mode].colors_min);
+    data_size += sizeof(modes[mode].colors_max);
+    data_size += sizeof(modes[mode].speed);
+    data_size += sizeof(modes[mode].direction);
+    data_size += sizeof(modes[mode].color_mode);
+    data_size += sizeof(mode_num_colors);
+    data_size += (mode_num_colors * sizeof(RGBColor));
+
+    // 데이터 버퍼 생성
+    unsigned char *data_buf = new unsigned char[data_size];
+
+    // 데이터 크기 복사
+    memcpy(&data_buf[data_ptr], &data_size, sizeof(data_size));
+    data_ptr += sizeof(data_size);
+
+    // 모드 인덱스 복사
+    memcpy(&data_buf[data_ptr], &mode, sizeof(int));
+    data_ptr += sizeof(int);
+
+    // 모드 이름 복사 (size + data)
+    memcpy(&data_buf[data_ptr], &mode_name_len, sizeof(unsigned short));
+    data_ptr += sizeof(unsigned short);
+
+    strcpy((char *)&data_buf[data_ptr], modes[mode].name.c_str());
+    data_ptr += mode_name_len;
+
+    // 모드 값 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].value, sizeof(modes[mode].value));
+    data_ptr += sizeof(modes[mode].value);
+
+    // 모드 플래그 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].flags, sizeof(modes[mode].flags));
+    data_ptr += sizeof(modes[mode].flags);
+
+    // 모드 속도 최소값 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].speed_min, sizeof(modes[mode].speed_min));
+    data_ptr += sizeof(modes[mode].speed_min);
+
+    // 모드 속도 최대값 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].speed_max, sizeof(modes[mode].speed_max));
+    data_ptr += sizeof(modes[mode].speed_max);
+
+    // 모드 색 최소값 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].colors_min, sizeof(modes[mode].colors_min));
+    data_ptr += sizeof(modes[mode].colors_min);
+
+    // 모드 색 최대값 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].colors_max, sizeof(modes[mode].colors_max));
+    data_ptr += sizeof(modes[mode].colors_max);
+
+    // 모드 속도 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].speed, sizeof(modes[mode].speed));
+    data_ptr += sizeof(modes[mode].speed);
+
+    // 모드 방향 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].direction, sizeof(modes[mode].direction));
+    data_ptr += sizeof(modes[mode].direction);
+
+    // 모드 색 모드 복사
+    memcpy(&data_buf[data_ptr], &modes[mode].color_mode, sizeof(modes[mode].color_mode));
+    data_ptr += sizeof(modes[mode].color_mode);
+
+    // 모드 색의 수 복사
+    memcpy(&data_buf[data_ptr], &mode_num_colors, sizeof(unsigned short));
+    data_ptr += sizeof(unsigned short);
+
+    // 모드 색 복사
+    for(int color_index = 0; color_index < mode_num_colors; color_index++)
+    {
+        // 모드 색 복사
+        memcpy(&data_buf[data_ptr], &modes[mode].colors[color_index], sizeof(modes[mode].colors[color_index]));
+        data_ptr += sizeof(modes[mode].colors[color_index]);
+    }
+
+    return(data_buf);
+}
+
+
+void RGBController::SetModeDescription(unsigned char* data_buf)
+{
+    int mode_idx;
+    unsigned int data_ptr = sizeof(unsigned int);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode index                                        |
+    \*---------------------------------------------------------*/
+    memcpy(&mode_idx, &data_buf[data_ptr], sizeof(int));
+    data_ptr += sizeof(int);
+
+    /*---------------------------------------------------------*\
+    | Check if we aren't reading beyond the list of modes.      |
+    \*---------------------------------------------------------*/
+    if(((size_t) mode_idx) >  modes.size())
+    {
+        return;
+    }
+
+    /*---------------------------------------------------------*\
+    | Get pointer to target mode                                |
+    \*---------------------------------------------------------*/
+    mode * new_mode = &modes[mode_idx];
+
+    /*---------------------------------------------------------*\
+    | Set active mode to the new mode                           |
+    \*---------------------------------------------------------*/
+    active_mode = mode_idx;
+
+    /*---------------------------------------------------------*\
+    | Copy in mode name (size+data)                             |
+    \*---------------------------------------------------------*/
+    unsigned short modename_len;
+    memcpy(&modename_len, &data_buf[data_ptr], sizeof(unsigned short));
+    data_ptr += sizeof(unsigned short);
+
+    new_mode->name = (char *)&data_buf[data_ptr];
+    data_ptr += modename_len;
+
+    /*---------------------------------------------------------*\
+    | Copy in mode value (data)                                 |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->value, &data_buf[data_ptr], sizeof(new_mode->value));
+    data_ptr += sizeof(new_mode->value);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode flags (data)                                 |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->flags, &data_buf[data_ptr], sizeof(new_mode->flags));
+    data_ptr += sizeof(new_mode->flags);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode speed_min (data)                             |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->speed_min, &data_buf[data_ptr], sizeof(new_mode->speed_min));
+    data_ptr += sizeof(new_mode->speed_min);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode speed_max (data)                             |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->speed_max, &data_buf[data_ptr], sizeof(new_mode->speed_max));
+    data_ptr += sizeof(new_mode->speed_max);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode colors_min (data)                            |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->colors_min, &data_buf[data_ptr], sizeof(new_mode->colors_min));
+    data_ptr += sizeof(new_mode->colors_min);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode colors_max (data)                            |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->colors_max, &data_buf[data_ptr], sizeof(new_mode->colors_max));
+    data_ptr += sizeof(new_mode->colors_max);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode speed (data)                                 |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->speed, &data_buf[data_ptr], sizeof(new_mode->speed));
+    data_ptr += sizeof(new_mode->speed);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode direction (data)                             |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->direction, &data_buf[data_ptr], sizeof(new_mode->direction));
+    data_ptr += sizeof(new_mode->direction);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode color_mode (data)                            |
+    \*---------------------------------------------------------*/
+    memcpy(&new_mode->color_mode, &data_buf[data_ptr], sizeof(new_mode->color_mode));
+    data_ptr += sizeof(new_mode->color_mode);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode number of colors                             |
+    \*---------------------------------------------------------*/
+    unsigned short mode_num_colors;
+    memcpy(&mode_num_colors, &data_buf[data_ptr], sizeof(unsigned short));
+    data_ptr += sizeof(unsigned short);
+
+    /*---------------------------------------------------------*\
+    | Copy in mode mode colors                                  |
+    \*---------------------------------------------------------*/
+    new_mode->colors.clear();
+    for(int color_index = 0; color_index < mode_num_colors; color_index++)
+    {
+        /*---------------------------------------------------------*\
+        | Copy in color (data)                                      |
+        \*---------------------------------------------------------*/
+        RGBColor new_color;
+        memcpy(&new_color, &data_buf[data_ptr], sizeof(RGBColor));
+        data_ptr += sizeof(RGBColor);
+
+        new_mode->colors.push_back(new_color);
+    }
+}
+
+unsigned char * RGBController::GetColorDescription()
+{
+    unsigned int data_ptr = 0;
+    unsigned int data_size = 0;
+
+    unsigned short num_colors = colors.size();
+
+    /*---------------------------------------------------------*\
+    | Calculate data size                                       |
+    \*---------------------------------------------------------*/
+    data_size += sizeof(data_size);
+    data_size += sizeof(num_colors);
+    data_size += num_colors * sizeof(RGBColor);
+
+    /*---------------------------------------------------------*\
+    | Create data buffer                                        |
+    \*---------------------------------------------------------*/
+    unsigned char *data_buf = new unsigned char[data_size];
+
+    /*---------------------------------------------------------*\
+    | Copy in data size                                         |
+    \*---------------------------------------------------------*/
+    memcpy(&data_buf[data_ptr], &data_size, sizeof(data_size));
+    data_ptr += sizeof(data_size);
+
+    /*---------------------------------------------------------*\
+    | Copy in number of colors (data)                           |
+    \*---------------------------------------------------------*/
+    memcpy(&data_buf[data_ptr], &num_colors, sizeof(unsigned short));
+    data_ptr += sizeof(unsigned short);
+
+    /*---------------------------------------------------------*\
+    | Copy in colors                                            |
+    \*---------------------------------------------------------*/
+    for(int color_index = 0; color_index < num_colors; color_index++)
+    {
+        /*---------------------------------------------------------*\
+        | Copy in color (data)                                      |
+        \*---------------------------------------------------------*/
+        memcpy(&data_buf[data_ptr], &colors[color_index], sizeof(colors[color_index]));
+        data_ptr += sizeof(colors[color_index]);
+    }
+
+    return(data_buf);
+}
+
+void RGBController::SetColorDescription(unsigned char* data_buf)
+{
+    unsigned int data_ptr = sizeof(unsigned int);
+
+    /*---------------------------------------------------------*\
+    | Copy in number of colors (data)                           |
+    \*---------------------------------------------------------*/
+    unsigned short num_colors;
+    memcpy(&num_colors, &data_buf[data_ptr], sizeof(unsigned short));
+    data_ptr += sizeof(unsigned short);
+
+    /*---------------------------------------------------------*\
+    | Check if we aren't reading beyond the list of colors.     |
+    \*---------------------------------------------------------*/
+    if(((size_t) num_colors) > colors.size())
+    {
+        return;
+    }
+
+    /*---------------------------------------------------------*\
+    | Copy in colors                                            |
+    \*---------------------------------------------------------*/
+    for(int color_index = 0; color_index < num_colors; color_index++)
+    {
+        RGBColor new_color;
+
+        /*---------------------------------------------------------*\
+        | Copy in color (data)                                      |
+        \*---------------------------------------------------------*/
+        memcpy(&new_color, &data_buf[data_ptr], sizeof(RGBColor));
+        data_ptr += sizeof(RGBColor);
+
+        colors[color_index] = new_color;
+    }
+}
+
+unsigned char * RGBController::GetZoneColorDescription(int zone)
+{
+    unsigned int data_ptr = 0;
+    unsigned int data_size = 0;
+
+    unsigned short num_colors = zones[zone].leds_count;
+
+    /*---------------------------------------------------------*\
+    | Calculate data size                                       |
+    \*---------------------------------------------------------*/
+    data_size += sizeof(data_size);
+    data_size += sizeof(zone);
+    data_size += sizeof(num_colors);
+    data_size += num_colors * sizeof(RGBColor);
+
+    /*---------------------------------------------------------*\
+    | Create data buffer                                        |
+    \*---------------------------------------------------------*/
+    unsigned char *data_buf = new unsigned char[data_size];
+
+    /*---------------------------------------------------------*\
+    | Copy in data size                                         |
+    \*---------------------------------------------------------*/
+    memcpy(&data_buf[data_ptr], &data_size, sizeof(data_size));
+    data_ptr += sizeof(data_size);
+
+    /*---------------------------------------------------------*\
+    | Copy in zone index                                        |
+    \*---------------------------------------------------------*/
+    memcpy(&data_buf[data_ptr], &zone, sizeof(zone));
+    data_ptr += sizeof(zone);
+
+    /*---------------------------------------------------------*\
+    | Copy in number of colors (data)                           |
+    \*---------------------------------------------------------*/
+    memcpy(&data_buf[data_ptr], &num_colors, sizeof(unsigned short));
+    data_ptr += sizeof(unsigned short);
+
+    /*---------------------------------------------------------*\
+    | Copy in colors                                            |
+    \*---------------------------------------------------------*/
+    for(int color_index = 0; color_index < num_colors; color_index++)
+    {
+        /*---------------------------------------------------------*\
+        | Copy in color (data)                                      |
+        \*---------------------------------------------------------*/
+        memcpy(&data_buf[data_ptr], &zones[zone].colors[color_index], sizeof(zones[zone].colors[color_index]));
+        data_ptr += sizeof(zones[zone].colors[color_index]);
+    }
+
+    return(data_buf);
+}
+
+void RGBController::SetZoneColorDescription(unsigned char *data_buf)
+{
+    unsigned int data_ptr = sizeof(unsigned int);
+    unsigned int zone_idx;
+
+    /*---------------------------------------------------------*\
+    | Copy in zone index                                        |
+    \*---------------------------------------------------------*/
+    memcpy(&zone_idx, &data_buf[data_ptr], sizeof(zone_idx));
+    data_ptr += sizeof(zone_idx);
+
+    /*---------------------------------------------------------*\
+    | Check if we aren't reading beyond the list of zones.      |
+    \*---------------------------------------------------------*/
+    if(((size_t) zone_idx) > zones.size())
+    {
+        return;
+    }
+
+    /*---------------------------------------------------------*\
+    | Copy in number of colors (data)                           |
+    \*---------------------------------------------------------*/
+    unsigned short num_colors;
+    memcpy(&num_colors, &data_buf[data_ptr], sizeof(unsigned short));
+    data_ptr += sizeof(unsigned short);
+
+    /*---------------------------------------------------------*\
+    | Copy in colors                                            |
+    \*---------------------------------------------------------*/
+    for(int color_index = 0; color_index < num_colors; color_index++)
+    {
+        RGBColor new_color;
+
+        /*---------------------------------------------------------*\
+        | Copy in color (data)                                      |
+        \*---------------------------------------------------------*/
+        memcpy(&new_color, &data_buf[data_ptr], sizeof(RGBColor));
+        data_ptr += sizeof(RGBColor);
+
+        zones[zone_idx].colors[color_index] = new_color;
+    }
+}
+
+unsigned char * RGBController::GetSingleLEDColorDescription(int led)
+{
+    /*---------------------------------------------------------*\
+    | Fixed size descrption:                                    |
+    |       int:      LED index                                 |
+    |       RGBColor: LED color                                 |
+    \*---------------------------------------------------------*/
+    unsigned char *data_buf = new unsigned char[sizeof(int) + sizeof(RGBColor)];
+
+    /*---------------------------------------------------------*\
+    | Copy in LED index                                         |
+    \*---------------------------------------------------------*/
+    memcpy(&data_buf[0], &led, sizeof(int));
+
+    /*---------------------------------------------------------*\
+    | Copy in LED color                                         |
+    \*---------------------------------------------------------*/
+    memcpy(&data_buf[sizeof(led)], &colors[led], sizeof(RGBColor));
+
+    return(data_buf);
+}
+
+void RGBController::SetSingleLEDColorDescription(unsigned char* data_buf)
+{
+    /*---------------------------------------------------------*\
+    | Fixed size descrption:                                    |
+    |       int:      LED index                                 |
+    |       RGBColor: LED color                                 |
+    \*---------------------------------------------------------*/
+    int led_idx;
+
+    /*---------------------------------------------------------*\
+    | Copy in LED index                                         |
+    \*---------------------------------------------------------*/
+    memcpy(&led_idx, &data_buf[0], sizeof(led_idx));
+
+    /*---------------------------------------------------------*\
+    | Check if we aren't reading beyond the list of leds.       |
+    \*---------------------------------------------------------*/
+    if(((size_t) led_idx) > leds.size())
+    {
+        return;
+    }
+
+    /*---------------------------------------------------------*\
+    | Copy in LED color                                         |
+    \*---------------------------------------------------------*/
+    memcpy(&colors[led_idx], &data_buf[sizeof(led_idx)], sizeof(RGBColor));
+}
+
+void RGBController::SetupColors()
+{
+    unsigned int total_led_count;
+
+    /*---------------------------------------------------------*\
+    | Determine total number of LEDs on the device              |
+    \*---------------------------------------------------------*/
+    total_led_count = 0;
+
+    for(std::size_t zone_idx = 0; zone_idx < zones.size(); zone_idx++)
+    {
+        total_led_count += zones[zone_idx].leds_count;
+    }
+
+    /*---------------------------------------------------------*\
+    | Set the size of the color buffer to the number of LEDs    |
+    \*---------------------------------------------------------*/
+    colors.resize(total_led_count);
+
+    /*---------------------------------------------------------*\
+    | Set the color buffer pointers on each zone                |
+    \*---------------------------------------------------------*/
+    total_led_count = 0;
+
+    for(std::size_t zone_idx = 0; zone_idx < zones.size(); zone_idx++)
+    {
+        zones[zone_idx].start_idx=total_led_count;
+
+        if((colors.size() > 0) && (zones[zone_idx].leds_count > 0))
+        {
+            zones[zone_idx].colors = &colors[total_led_count];
+        }
+        else
+        {
+            zones[zone_idx].colors = NULL;
+        }
+
+        if((leds.size() > 0) && (zones[zone_idx].leds_count > 0))
+        {
+            zones[zone_idx].leds   = &leds[total_led_count];
+        }
+        else
+        {
+            zones[zone_idx].leds    = NULL;
+        }
+
+
+        total_led_count += zones[zone_idx].leds_count;
+    }
+}
+
+RGBColor RGBController::GetLED(unsigned int led)
+{
+    if(led < colors.size())
+    {
+        return(colors[led]);
+    }
+    else
+    {
+        return(0x00000000);
+    }
+}
+
+void RGBController::SetLED(unsigned int led, RGBColor color)
+{
+    if(led < colors.size())
+    {
+        colors[led] = color;
+    }
+}
+
+void RGBController::SetAllLEDs(RGBColor color)
+{
+    for(std::size_t zone_idx = 0; zone_idx < zones.size(); zone_idx++)
+    {
+        SetAllZoneLEDs(zone_idx, color);
+    }
+}
+
+void RGBController::SetAllZoneLEDs(int zone, RGBColor color)
+{
+    for (std::size_t color_idx = 0; color_idx < zones[zone].leds_count; color_idx++)
+    {
+        zones[zone].colors[color_idx] = color;
+    }
+}
+
+int RGBController::GetMode()
+{
+    return(active_mode);
+}
+
+void RGBController::SetMode(int mode)
+{
+    active_mode = mode;
+
+    UpdateMode();
+}
+
+void RGBController::RegisterUpdateCallBack(RGBControllerCallback new_callback, void *new_callback_arg)
+{
+    UpdateCallbacks.push_back(new_callback);
+    UpdateCallbackArgs.push_back(new_callback_arg);
+}
+
+void RGBController::UnregisterUpdateCallback(void * callback_arg)
+{
+    for(unsigned int callback_idx = 0; callback_idx < UpdateCallbackArgs.size(); callback_idx++ )
+    {
+        if(UpdateCallbackArgs[callback_idx] == callback_arg)
+        {
+            UpdateCallbackArgs.erase(UpdateCallbackArgs.begin() + callback_idx);
+            UpdateCallbacks.erase(UpdateCallbacks.begin() + callback_idx);
+
+            break;
+        }
+    }
+}
+
+void RGBController::SignalUpdate()
+{
+    UpdateMutex.lock();
+
+    // 클라이언트 정보가 바뀌면 callback 호출
+    for(unsigned int callback_idx = 0; callback_idx < UpdateCallbacks.size(); callback_idx++)
+    {
+        UpdateCallbacks[callback_idx](UpdateCallbackArgs[callback_idx]);
+    }
+
+    UpdateMutex.unlock();
+}
+void RGBController::UpdateLEDs()
+{
+    CallFlag_UpdateLEDs = true;
+
+    SignalUpdate();
+}
+
+void RGBController::UpdateMode()
+{
+    CallFalg_UpdateMode = true;
+}
+
+void RGBController::DeviceUpdateLEDs()
+{
+
+}
+
+void RGBController::DeviceUpdateMode()
+{
+
+}
+
+void RGBController::DeviceCallThreadFunction()
+{
+    CallFlag_UpdateLEDs = false;
+    CallFalg_UpdateMode = false;
+
+    while(DeviceThreadRunning.load() == true)
+    {
+        if(CallFalg_UpdateMode.load() == false)
+        {
+            DeviceUpdateMode();
+            CallFalg_UpdateMode = false;
+        }
+        if(CallFlag_UpdateLEDs.load() == true)
+        {
+            DeviceUpdateLEDs();
+            CallFlag_UpdateLEDs = false;
+        }
+        else
+        {
+           std::this_thread::sleep_for(1ms);
+        }
+    }
+}
+
+std::string device_type_to_str(device_type type)
+{
+    switch(type)
+    {
+    case DEVICE_TYPE_MOTHERBOARD:
+        return "Motherboard";
+    case DEVICE_TYPE_DRAM:
+        return "DRAM";
+    case DEVICE_TYPE_MOUSE:
+        return "Mouse";
+    default:
+        return "Unknown";
+    }
+}

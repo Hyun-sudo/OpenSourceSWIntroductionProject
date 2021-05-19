@@ -1,6 +1,3 @@
-#ifndef RGBCONTROLLER_H
-#define RGBCONTROLLER_H
-
 /*
  *  Defintions and types for generic RGB lighiting controller interface
 */
@@ -138,6 +135,7 @@ public:
     virtual ~RGBController();
 
     void SetupColors();
+
     RGBColor GetLED(unsigned int led);
     void SetLED(unsigned int led, RGBColor color);
     void SetAllLEDs(RGBColor color);
@@ -152,8 +150,11 @@ public:
     unsigned char * GetModeDescription(int mode);
     void SetModeDescription(unsigned char* data_buf);
 
-    unsigned char * GetColorDescription(int zone);
+    unsigned char * GetColorDescription();
     void SetColorDescription(unsigned char* data_buf);
+
+    unsigned char * GetZoneColorDescription(int zone);
+    void SetZoneColorDescription(unsigned char* data_buf);
 
     unsigned char * GetSingleLEDColorDescription(int led);
     void SetSingleLEDColorDescription(unsigned char* data_buf);
@@ -178,9 +179,7 @@ private:
     std::atomic<bool> CallFalg_UpdateMode;
     std::atomic<bool> DeviceThreadRunning;
 
-    std::mutex Updatemutex;
+    std::mutex UpdateMutex;
     std::vector<RGBControllerCallback> UpdateCallbacks;
     std::vector<void *> UpdateCallbackArgs;
 };
-
-#endif // RGBCONTROLLER_H
