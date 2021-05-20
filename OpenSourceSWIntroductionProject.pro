@@ -12,12 +12,14 @@ SOURCES += \
     Dialog01.cpp \
     RGBController/RGBController.cpp \
     RGBController/RGBController_Dummy.cpp \
+    i2c_smbus/i2c_smbus.cpp \
     main.cpp
 
 HEADERS += \
     Dialog01.h \
     RGBController/RGBContoller.h \
-    RGBController/RGBController_Dummy.h
+    RGBController/RGBController_Dummy.h \
+    i2c_smbus/i2c_smbus.h
 
 FORMS += \
     Dialog01.ui
