@@ -11,11 +11,13 @@ CONFIG += c++14
 SOURCES += \
     Dialog01.cpp \
     RGBController/RGBController.cpp \
+    RGBController/RGBController_Dummy.cpp \
     main.cpp
 
 HEADERS += \
     Dialog01.h \
-    RGBController/RGBContoller.h
+    RGBController/RGBContoller.h \
+    RGBController/RGBController_Dummy.h
 
 FORMS += \
     Dialog01.ui
