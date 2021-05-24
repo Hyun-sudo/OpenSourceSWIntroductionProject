@@ -9,22 +9,26 @@ CONFIG += c++14
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Dialog01.cpp \
     RGBController/RGBController.cpp \
     RGBController/RGBController_Dummy.cpp \
     i2c_smbus/i2c_smbus.cpp \
-    main.cpp
+    i2c_tools/i2c_tools.cpp \
+    main.cpp \
+    mainwindow.cpp
 
 HEADERS += \
-    Dialog01.h \
     RGBController/RGBContoller.h \
     RGBController/RGBController_Dummy.h \
-    i2c_smbus/i2c_smbus.h
+    i2c_smbus/i2c_smbus.h \
+    i2c_tools/i2c_tools.h \
+    mainwindow.h
 
 FORMS += \
-    Dialog01.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
