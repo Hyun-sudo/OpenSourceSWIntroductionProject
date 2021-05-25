@@ -9,21 +9,54 @@ CONFIG += c++14
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    AsusAuraController/AsusAuraCoreController.cpp \
+    AsusAuraController/AsusAuraCoreControllerDetect.cpp \
+    ColorWheel/ColorWheel.cpp \
+    ProfileManager.cpp \
     RGBController/RGBController.cpp \
     RGBController/RGBController_Dummy.cpp \
+    ResourceManager.cpp \
+    dmiinfo.cpp \
+    hidapi/hidapi.c \
     i2c_smbus/i2c_smbus.cpp \
     i2c_tools/i2c_tools.cpp \
+    libusb-1.0.22/examples/source/ezusb.c \
+    libusb-1.0.22/examples/source/fxload.c \
+    libusb-1.0.22/examples/source/listdevs.c \
+    libusb-1.0.22/examples/source/testlibusb.c \
+    libusb-1.0.22/examples/source/xusb.c \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    RGBController/RGBContoller.h \
+    AsusAuraController/AsusAuraCoreController.h \
+    AsusAuraController/RGBController_AsusAuraCore.h \
+    ColorWheel/ColorWheel.h \
+    Detector.h \
+    DeviceDetector.h \
+    LogitechGProWirelessController/LogitechGProWirelessController.h \
+    LogitechGProWirelessController/RGBController_LogitechGProWireless.h \
+    ProfileManager.h \
+    RGBController/RGBController.h \
     RGBController/RGBController_Dummy.h \
+    ResourceManager.h \
+    SettingsManager.h \
+    dmiinfo.h \
+    hidapi/hidapi/hidapi.h \
     i2c_smbus/i2c_smbus.h \
     i2c_tools/i2c_tools.h \
-    mainwindow.h
+    json/json.hpp \
+    libusb-1.0.22/examples/source/ezusb.h \
+    libusb-1.0.22/examples/source/stdint.h \
+    libusb-1.0.22/include/libusb-1.0/libusb.h \
+    mainwindow.h \
+    wmi/acpiwmi.h \
+    wmi/wmi.h
 
 FORMS += \
+    DeviceInfoPage.ui \
+    DevicePage.ui \
+    DeviceProfileSaveDialog.ui \
     mainwindow.ui
 
 # Default rules for deployment.
@@ -31,4 +64,32 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES +=
+DISTFILES += \
+    hidapi-win/x64/hidapi.dll \
+    hidapi-win/x64/hidapi.lib \
+    hidapi-win/x86/hidapi.dll \
+    hidapi-win/x86/hidapi.lib \
+    libusb-1.0.22/MS32/dll/libusb-1.0.dll \
+    libusb-1.0.22/MS32/dll/libusb-1.0.lib \
+    libusb-1.0.22/MS32/dll/libusb-1.0.pdb \
+    libusb-1.0.22/MS32/static/libusb-1.0.lib \
+    libusb-1.0.22/MS64/dll/libusb-1.0.dll \
+    libusb-1.0.22/MS64/dll/libusb-1.0.lib \
+    libusb-1.0.22/MS64/dll/libusb-1.0.pdb \
+    libusb-1.0.22/MS64/static/libusb-1.0.lib \
+    libusb-1.0.22/MinGW32/dll/libusb-1.0.dll \
+    libusb-1.0.22/MinGW32/dll/libusb-1.0.dll.a \
+    libusb-1.0.22/MinGW32/static/libusb-1.0.a \
+    libusb-1.0.22/MinGW64/dll/libusb-1.0.dll \
+    libusb-1.0.22/MinGW64/dll/libusb-1.0.dll.a \
+    libusb-1.0.22/MinGW64/static/libusb-1.0.a \
+    libusb-1.0.22/README.txt \
+    libusb-1.0.22/examples/bin32/fxload.exe \
+    libusb-1.0.22/examples/bin32/listdevs.exe \
+    libusb-1.0.22/examples/bin32/testlibusb.exe \
+    libusb-1.0.22/examples/bin32/xusb.exe \
+    libusb-1.0.22/examples/bin64/fxload.exe \
+    libusb-1.0.22/examples/bin64/listdevs.exe \
+    libusb-1.0.22/examples/bin64/testlibusb.exe \
+    libusb-1.0.22/examples/bin64/xusb.exe \
+    libusb-1.0.22/libusb-1.0.def

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RGBContoller.h"
+#include "RGBController.h"
 
 class RGBController_Dummy : public RGBController
 {
