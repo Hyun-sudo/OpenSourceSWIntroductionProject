@@ -46,6 +46,14 @@ enum
     MODE_DIRECTION_VERTICAL     = 5,                    // 모드 방향 수직
 };
 
+enum
+{
+    MODE_COLORS_NONE            = 0,        /* Mode has no colors               */
+    MODE_COLORS_PER_LED         = 1,        /* Mode has per LED colors selected */
+    MODE_COLORS_MODE_SPECIFIC   = 2,        /* Mode specific colors selected    */
+    MODE_COLORS_RANDOM          = 3,        /* Mode has random colors selected  */
+};
+
 // Mode Type
 
 typedef struct
@@ -170,7 +178,7 @@ public:
     virtual void ResizeZone(int zone, int new_size) = 0;
     virtual void DeviceUpdateLEDs() = 0;
     virtual void UpdateZoneLEDs(int zone) = 0;
-    virtual void DeviceSingleLED(int led) = 0;
+    virtual void UpdateSingleLED(int led) = 0;
     virtual void DeviceUpdateMode() = 0;
     virtual void SetCustomMode() = 0;
 private:

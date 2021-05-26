@@ -138,7 +138,7 @@ static void free_hid_device(hid_device *dev)
 
 #ifdef WIN32
 #define CLOCK_REALTIME 0
-    static int clock_gettime(int x, struct timespec *spec)      //C-file part
+    int clock_gettime(int x, struct timespec *spec)      //C-file part
     {
         __int64 wintime; GetSystemTimeAsFileTime((FILETIME*)&wintime);
         wintime -= 116444736000000000i64;  //1jan1601 to 1jan1970

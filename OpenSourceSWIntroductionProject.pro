@@ -11,7 +11,10 @@ CONFIG += c++14
 SOURCES += \
     AsusAuraController/AsusAuraCoreController.cpp \
     AsusAuraController/AsusAuraCoreControllerDetect.cpp \
+    AsusAuraController/RGBController_AsusAuraCore.cpp \
     ColorWheel/ColorWheel.cpp \
+    LogitechGProWirelessController/LogitechGProWirelessController.cpp \
+    LogitechGProWirelessController/RGBController_LogitechGProWireless.cpp \
     ProfileManager.cpp \
     RGBController/RGBController.cpp \
     RGBController/RGBController_Dummy.cpp \
@@ -34,11 +37,13 @@ HEADERS += \
     ColorWheel/ColorWheel.h \
     Detector.h \
     DeviceDetector.h \
+    DeviceInfoPage.h \
     LogitechGProWirelessController/LogitechGProWirelessController.h \
     LogitechGProWirelessController/RGBController_LogitechGProWireless.h \
     ProfileManager.h \
     RGBController/RGBController.h \
     RGBController/RGBController_Dummy.h \
+    RGBSync.h \
     ResourceManager.h \
     SettingsManager.h \
     dmiinfo.h \
@@ -57,6 +62,9 @@ FORMS += \
     DeviceInfoPage.ui \
     DevicePage.ui \
     DeviceProfileSaveDialog.ui \
+    SupportedDevicePage.ui \
+    SystemInfo.ui \
+    ZoneResizeDialog.ui \
     mainwindow.ui
 
 # Default rules for deployment.

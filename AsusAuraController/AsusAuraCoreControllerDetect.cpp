@@ -6,18 +6,10 @@
 
 #define AURA_CORE_VID 0x0B05
 
-/******************************************************************************************\
-*                                                                                          *
-*   DetectAuraCoreControllers                                                              *
-*                                                                                          *
-*       Tests the USB address to see if an Asus ROG Aura Core controller exists there      *
-*                                                                                          *
-\******************************************************************************************/
-
 void DetectAsusAuraCoreControllers(hid_device_info* info, const std::string&)
 {
-    hid_device* dev = hid_open_path(info->path);
-    if( dev )
+    hid_device * dev = hid_open_path(info->path);
+    if(dev)
     {
         AuraCoreController * controller = new AuraCoreController(dev, info->path);
         RGBController_AuraCore * rgb_controller = new RGBController_AuraCore(controller);
