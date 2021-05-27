@@ -9,19 +9,19 @@ namespace Ui {
 class DeviceInfoPage;
 }
 
-class Ui::DeviceInfoPage : public QFrame
+class DeviceInfoPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DeviceInfoPage(RGBController * dev, QWidget * parent = nullptr);
+    explicit DeviceInfoPage(QWidget *parent = nullptr);
     ~DeviceInfoPage();
 
     RGBController * GetController();
 
 private:
     RGBController * controller;
-    Ui::DeviceInfoPage * ui;
+    Ui::DeviceInfoPage *ui;
 };
 
 #endif // DEVICEINFOPAGE_H

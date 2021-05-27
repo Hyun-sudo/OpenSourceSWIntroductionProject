@@ -29,18 +29,27 @@ SOURCES += \
     libusb-1.0.22/examples/source/testlibusb.c \
     libusb-1.0.22/examples/source/xusb.c \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qt/deviceinfopage.cpp \
+    qt/devicepage.cpp \
+    qt/profilesavedialog.cpp \
+    qt/rgbdialog.cpp \
+    qt/supporteddevicepage.cpp \
+    qt/systeminfopage.cpp \
+    qt/zoneresizedialog.cpp
 
 HEADERS += \
     AsusAuraController/AsusAuraCoreController.h \
     AsusAuraController/RGBController_AsusAuraCore.h \
     ColorWheel/ColorWheel.h \
     Detector.h \
+    DetectorTableModel.h \
     DeviceDetector.h \
-    DeviceInfoPage.h \
+    DeviceView.h \
     LogitechGProWirelessController/LogitechGProWirelessController.h \
     LogitechGProWirelessController/RGBController_LogitechGProWireless.h \
     ProfileManager.h \
+    ProfileSaveDialog.h \
     RGBController/RGBController.h \
     RGBController/RGBController_Dummy.h \
     RGBSync.h \
@@ -55,17 +64,25 @@ HEADERS += \
     libusb-1.0.22/examples/source/stdint.h \
     libusb-1.0.22/include/libusb-1.0/libusb.h \
     mainwindow.h \
+    qt/deviceinfopage.h \
+    qt/devicepage.h \
+    qt/profilesavedialog.h \
+    qt/rgbdialog.h \
+    qt/supporteddevicepage.h \
+    qt/systeminfopage.h \
+    qt/zoneresizedialog.h \
     wmi/acpiwmi.h \
     wmi/wmi.h
 
 FORMS += \
-    DeviceInfoPage.ui \
-    DevicePage.ui \
-    DeviceProfileSaveDialog.ui \
-    SupportedDevicePage.ui \
-    SystemInfo.ui \
-    ZoneResizeDialog.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    qt/deviceinfopage.ui \
+    qt/devicepage.ui \
+    qt/profilesavedialog.ui \
+    qt/rgbdialog.ui \
+    qt/supporteddevicepage.ui \
+    qt/systeminfopage.ui \
+    qt/zoneresizedialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

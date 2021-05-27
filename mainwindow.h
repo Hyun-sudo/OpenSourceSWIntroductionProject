@@ -1,6 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "ui_MainWindow.h"
+
+#include "SystemInfoPage.h"
+
 #include <vector>
 #include "i2c_smbus/i2c_smbus.h"
 #include "RGBController/RGBController.h"
