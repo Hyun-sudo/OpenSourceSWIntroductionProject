@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ProfileSaveDialog</class>
- <widget class="QWidget" name="ProfileSaveDialog">
+ <class>ProfileSaveDialogUi</class>
+ <widget class="QWidget" name="ProfileSaveDialogUi">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,20 +13,14 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>120</y>
+     <y>70</y>
      <width>341</width>
-     <height>32</height>
+     <height>20</height>
     </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -42,14 +36,20 @@
     <string>New Profile Name:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>70</y>
+     <y>120</y>
      <width>341</width>
-     <height>20</height>
+     <height>32</height>
     </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
  </widget>

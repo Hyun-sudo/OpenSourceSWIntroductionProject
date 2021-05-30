@@ -1,9 +1,7 @@
 #ifndef DEVICEINFOPAGE_H
 #define DEVICEINFOPAGE_H
 
-#include <QFrame>
-#include "RGBController/RGBController.h"
-#include "ui_DeviceInfoPage.h"
+#include <QWidget>
 
 namespace Ui {
 class DeviceInfoPage;
@@ -17,10 +15,7 @@ public:
     explicit DeviceInfoPage(QWidget *parent = nullptr);
     ~DeviceInfoPage();
 
-    RGBController * GetController();
-
 private:
-    RGBController * controller;
     Ui::DeviceInfoPage *ui;
 };
 

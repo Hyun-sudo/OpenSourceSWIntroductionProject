@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ZoneResizeDialog</class>
- <widget class="QWidget" name="ZoneResizeDialog">
+ <class>ZoneResizeDialogUi</class>
+ <widget class="QWidget" name="ZoneResizeDialogUi">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,14 +13,17 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QSpinBox" name="ResizeBox">
+  <widget class="QSlider" name="ResizeSlider">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>80</y>
-     <width>121</width>
+     <x>20</x>
+     <y>20</y>
+     <width>361</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
@@ -39,17 +42,14 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QSlider" name="ResizeSlider">
+  <widget class="QSpinBox" name="ResizeBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>361</width>
+     <x>260</x>
+     <y>80</y>
+     <width>121</width>
      <height>22</height>
     </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
    </property>
   </widget>
  </widget>

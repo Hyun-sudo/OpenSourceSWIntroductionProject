@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DeviceInfoPageUi</class>
- <widget class="QWidget" name="DeviceInfoPageUi">
+ <class>SoftwareInfoPageUi</class>
+ <widget class="QWidget" name="SoftwareInfoPageUi">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,86 +15,72 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QLabel" name="NameLabel">
-     <property name="text">
-      <string>Name:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="NameValue">
-     <property name="text">
-      <string>Name Value</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="TypeLabel">
-     <property name="text">
-      <string>Type:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="TypeValue">
-     <property name="text">
-      <string>Type Value</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="DescriptionLabel">
-     <property name="text">
-      <string>Description:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLabel" name="DescriptionValue">
-     <property name="text">
-      <string>Description Value</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
     <widget class="QLabel" name="VersionLabel">
      <property name="text">
       <string>Version:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="0" column="1">
     <widget class="QLabel" name="VersionValue">
      <property name="text">
       <string>Version Value</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="LocationLabel">
+   <item row="1" column="0">
+    <widget class="QLabel" name="BuildDateLabel">
      <property name="text">
-      <string>Location:</string>
+      <string>Build Date:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="BuildDateValue">
+     <property name="text">
+      <string>Build Date Value</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="GitCommitIDLabel">
+     <property name="text">
+      <string>Git Commit ID:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLabel" name="GitCommitIDValue">
+     <property name="text">
+      <string>Git Commit ID Value</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="GitCommitDateLabel">
+     <property name="text">
+      <string>Git Commit Date:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="GitCommitDateValue">
+     <property name="text">
+      <string>Git Commit Date Value</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="GitBranchLabel">
+     <property name="text">
+      <string>Git Branch:</string>
      </property>
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QLabel" name="LocationValue">
+    <widget class="QLabel" name="GitBranchValue">
      <property name="text">
-      <string>Location Value</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="SerialLabel">
-     <property name="text">
-      <string>Serial:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QLabel" name="SerialValue">
-     <property name="text">
-      <string>Serial Value</string>
+      <string>Git Branch Value</string>
      </property>
     </widget>
    </item>

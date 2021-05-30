@@ -1,5 +1,5 @@
 #include "deviceinfopage.h"
-#include "ui_DeviceInfoPage.h"
+#include "ui_deviceinfopage.h"
 
 DeviceInfoPage::DeviceInfoPage(QWidget *parent) :
     QWidget(parent),
