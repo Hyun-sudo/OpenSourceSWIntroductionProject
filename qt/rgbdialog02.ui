@@ -21,7 +21,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="iconSize">
        <size>
@@ -29,13 +29,13 @@
         <height>20</height>
        </size>
       </property>
-      <widget class="QWidget" name="TabDevices_2">
+      <widget class="QWidget" name="TabDevices">
        <attribute name="title">
         <string>Devices</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="1" column="0">
-         <widget class="QTabWidget" name="DevicesTabBar_2">
+         <widget class="QTabWidget" name="DevicesTabBar">
           <property name="tabPosition">
            <enum>QTabWidget::West</enum>
           </property>
@@ -43,13 +43,13 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="TabInformation_2">
+      <widget class="QWidget" name="TabInformation">
        <attribute name="title">
         <string>Information</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="0" column="0">
-         <widget class="QTabWidget" name="InformationTabBar_2">
+         <widget class="QTabWidget" name="InformationTabBar">
           <property name="tabPosition">
            <enum>QTabWidget::West</enum>
           </property>

@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fan.png</file>
+        <file>grapics-card.png</file>
+        <file>keyboard.png</file>
+        <file>motherboard.png</file>
+        <file>mouse.png</file>
+        <file>ram.png</file>
+        <file>RGBSync.png</file>
+    </qresource>
+</RCC>

@@ -20,5 +20,10 @@ protected:
 
 private:
     void UpdateProfileList();
-    bool LoadProfileWithOptions(std::string profile_name, bool load_size, bool load_settings);
+    bool LoadProfileWithOptions
+            (
+            std::string     profile_name,
+            bool            load_size,
+            bool            load_settings
+            );
 };

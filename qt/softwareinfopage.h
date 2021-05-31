@@ -1,13 +1,15 @@
 #ifndef SOFTWAREINFOPAGE_H
 #define SOFTWAREINFOPAGE_H
 
-#include <QWidget>
+#include "ui_softwareinfopage.h"
+
+#include <QFrame>
 
 namespace Ui {
 class SoftwareInfoPage;
 }
 
-class SoftwareInfoPage : public QWidget
+class SoftwareInfoPage : public QFrame
 {
     Q_OBJECT
 
@@ -16,7 +18,7 @@ public:
     ~SoftwareInfoPage();
 
 private:
-    Ui::SoftwareInfoPage *ui;
+    Ui::SoftwareInfoPageUi *ui;
 };
 
 #endif // SOFTWAREINFOPAGE_H

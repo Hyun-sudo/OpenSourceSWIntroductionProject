@@ -1,11 +1,16 @@
 #include "softwareinfopage.h"
-#include "ui_softwareinfopage.h"
 
 SoftwareInfoPage::SoftwareInfoPage(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::SoftwareInfoPage)
+    QFrame(parent),
+    ui(new Ui::SoftwareInfoPageUi)
 {
     ui->setupUi(this);
+
+    ui->VersionValue->setText(VERSION_STRING);
+    ui->BuildDateValue->setText(BUILDDATE_STRING);
+    ui->GitCommitIDValue->setText(GIT_COMMIT_ID);
+    ui->GitCommitDateValue->setText(GIT_COMMIT_DATE);
+    ui->GitBranchValue->setText(GIT_BRANCH);
 }
 
 SoftwareInfoPage::~SoftwareInfoPage()
