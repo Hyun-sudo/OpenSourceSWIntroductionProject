@@ -75,16 +75,6 @@ std::string i2c_detect(i2c_smbus_interface * bus, int mode)
 
 }   /* i2c_detect() */
 
-/******************************************************************************************\
-*                                                                                          *
-*   i2c_dump                                                                               *
-*                                                                                          *
-*       Prints the values at each address of a given SMBus device                          *
-*                                                                                          *
-*           bus - pointer to i2c_smbus_interface to scan                                   *
-*           address - SMBus device address to scan                                         *
-*                                                                                          *
-\******************************************************************************************/
 /*
  * i2c_dump
  * 주어진 SMBus 기기의 주소 값을 반환함
