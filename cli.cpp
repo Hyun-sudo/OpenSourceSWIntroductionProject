@@ -24,10 +24,8 @@ struct Options
 {
     std::vector<DeviceOptions> devices;
 
-    /*---------------------------------------------------------*\
-    | If hasDevice is false, devices above is empty and         |
-    | allDeviceOptions shall be applied to all available devices|
-    \*---------------------------------------------------------*/
+    // hasDevice 가 false이면, 기기는 비어있는 것
+    // allDeviceOptions은 모든 활성화 기기에 적용되어야 함
     bool hasDevice;
     DeviceOptions allDeviceOptions;
 };
@@ -53,10 +51,10 @@ bool ParseColors(std::string colors_string, DeviceOptions *options)
             break;
         }
 
-        // If there are no more colors
+        // 색이 더 이상 없으면
         if (rgb_end == std::string::npos)
             break;
-        // Remove the current color and the next color's leading comma
+        // 현재 색 제거함
         colors_string = colors_string.substr(color.length() + 1);
     }
 
@@ -65,10 +63,8 @@ bool ParseColors(std::string colors_string, DeviceOptions *options)
 
 unsigned int ParseMode(DeviceOptions& options)
 {
-    /*---------------------------------------------------------*\
-    | Search through all of the device modes and see if there is|
-    | a match.  If no match is found, print an error message.   |
-    \*---------------------------------------------------------*/
+    // 모든 기기 모드에서 맞는 모드를 찾음
+    // 찾지 못하면 에러 메세지 출력
     for(std::size_t mode_idx = 0; mode_idx < rgb_controllers[options.device]->modes.size(); mode_idx++)
     {
         if (rgb_controllers[options.device]->modes[mode_idx].name == options.mode)
@@ -95,8 +91,6 @@ DeviceOptions* GetDeviceOptionsForDevID(Options *opts, int device)
             return &opts->devices[i];
         }
     }
-
-    // should never happen
     std::cout << "Internal error: Tried setting an option on a device that wasn't specified" << std::endl;
     abort();
 }
@@ -113,9 +107,7 @@ std::string QuoteIfNecessary(std::string str)
     }
 }
 
-/*---------------------------------------------------------------------------------------------------------*\
-| Option processing functions                                                                               |
-\*---------------------------------------------------------------------------------------------------------*/
+// 옵션 처리 함수들
 
 void OptionHelp()
 {
@@ -126,14 +118,14 @@ void OptionHelp()
     help_text += "Usage: OpenRGB (--device [--mode] [--color])...\n";
     help_text += "\n";
     help_text += "Options:\n";
-    help_text += "--gui                                    Show GUI, also appears when not passing any parameters\n";
-    help_text += "-l,  --list-devices                      Lists every compatible device with their number\n";
-    help_text += "-d,  --device [0-9]                      Selects device to apply colors and/or effect to, or applies to all devices if omitted\n";
-    help_text += "                                         Can be specified multiple times with different modes and colors\n";
-    help_text += "-c,  --color \"FFFFFF,00AAFF...\"          Sets colors on each device directly if no effect is specified, and sets the effect color if an effect is specified\n";
-    help_text += "                                         If there are more LEDs than colors given, the last color will be applied to the remaining LEDs\n";
-    help_text += "-m,  --mode [breathing | static | ...]   Sets the mode to be applied, check --list-devices to see which modes are supported on your device\n";
-    help_text += "-v,  --version                           Display version and software build information\n";
+    help_text += "--gui                                    GUI를 보여줍니다.\n";
+    help_text += "-l,  --list-devices                      모든 호환 장치를 해당 번호로 나열합니다.\n";
+    help_text += "-d,  --device [0-9]                      색상 또는 효과를 적용할 장치를 선택하거나 누락된 경우 모든 장치에 적용합니다.\n";
+    help_text += "                                         C다른 모드와 색상으로 여러 번 지정할 수 있습니다.\n";
+    help_text += "-c,  --color \"FFFFFF,00AAFF...\"          효과가 지정되지 않은 경우 각 장치에 직접 색상을 설정하고 효과가 지정된 경우 효과 색상을 설정합니다.\n";
+    help_text += "                                         주어진 색상보다 LED가 많을 경우 남은 LED에 마지막 색상이 적용됩니다.\n";
+    help_text += "-m,  --mode [breathing | static | ...]   적용할 모드를 설정합니다. --list-devices를 확인하여 장치에서 지원되는 모드를 확인합니다.\n";
+    help_text += "-v,  --version                           버전 및 소프트웨어 빌드 정보 표시\n";
     help_text += "-p,  --profile filename.orp              Load the profile from filename.orp\n";
     help_text += "-sp, --save-profile filename.orp         Save the given settings to profile filename.orp\n";
 
@@ -167,51 +159,37 @@ void OptionListDevices()
     {
         RGBController *controller = rgb_controllers[controller_idx];
 
-        /*---------------------------------------------------------*\
-        | Print device name                                         |
-        \*---------------------------------------------------------*/
+        // 기기 이름 출력
         std::cout << controller_idx << ": " << controller->name << std::endl;
 
-        /*---------------------------------------------------------*\
-        | Print device type                                         |
-        \*---------------------------------------------------------*/
+        // 기기 타입 출력
             std::cout << "  Type:           " << device_type_to_str(controller->type) << std::endl;
 
-        /*---------------------------------------------------------*\
-        | Print device description                                  |
-        \*---------------------------------------------------------*/
+        // 기기 설명 출력
         if(!controller->description.empty())
         {
             std::cout << "  Description:    " << controller->description << std::endl;
         }
 
-        /*---------------------------------------------------------*\
-        | Print device version                                      |
-        \*---------------------------------------------------------*/
+        // 기기 버전 출력
         if(!controller->version.empty())
         {
             std::cout << "  Version:        " << controller->version << std::endl;
         }
 
-        /*---------------------------------------------------------*\
-        | Print device location                                     |
-        \*---------------------------------------------------------*/
+        // 기기 위치 출력
         if(!controller->location.empty())
         {
             std::cout << "  Location:       " << controller->location << std::endl;
         }
 
-        /*---------------------------------------------------------*\
-        | Print device serial                                       |
-        \*---------------------------------------------------------*/
+        // 기기 시리얼 출력
         if(!controller->serial.empty())
         {
             std::cout << "  Serial:         " << controller->serial << std::endl;
         }
 
-        /*---------------------------------------------------------*\
-        | Print device modes                                        |
-        \*---------------------------------------------------------*/
+        // 기기 모드 출력
         if(!controller->modes.empty())
         {
             std::cout << "  Modes:";
@@ -230,9 +208,7 @@ void OptionListDevices()
             std::cout << std::endl;
         }
 
-        /*---------------------------------------------------------*\
-        | Print device zones                                        |
-        \*---------------------------------------------------------*/
+        // 기기 zone 출력
         if(!controller->zones.empty())
         {
             std::cout << "  Zones:";
@@ -244,9 +220,7 @@ void OptionListDevices()
             std::cout << std::endl;
         }
 
-        /*---------------------------------------------------------*\
-        | Print device LEDs                                         |
-        \*---------------------------------------------------------*/
+        // 기기 LED 출력
         if(!controller->leds.empty())
         {
             std::cout << "  LEDs:";
@@ -362,45 +336,35 @@ bool ProcessOptions(int argc, char *argv[], Options *options)
         std::string option   = argv[arg_index];
         std::string argument = "";
 
-        /*---------------------------------------------------------*\
-        | Handle options that take an argument                      |
-        \*---------------------------------------------------------*/
+        // argument를 가지는 옵션 처리
         if(arg_index + 1 < argc)
         {
             argument = argv[arg_index + 1];
             arg_index++;
         }
 
-        /*---------------------------------------------------------*\
-        | -h / --help                                               |
-        \*---------------------------------------------------------*/
+        // 도움말
         if(option == "--help" || option == "-h")
         {
             OptionHelp();
             exit(0);
         }
 
-        /*---------------------------------------------------------*\
-        | -v / --version                                            |
-        \*---------------------------------------------------------*/
+        // 버전
         else if(option == "--version" || option == "-v")
         {
             OptionVersion();
             exit(0);
         }
 
-        /*---------------------------------------------------------*\
-        | -l / --list-devices                                       |
-        \*---------------------------------------------------------*/
+        // 기기 목록
         else if(option == "--list-devices" || option == "-l")
         {
             OptionListDevices();
             exit(0);
         }
 
-        /*---------------------------------------------------------*\
-        | -d / --device                                             |
-        \*---------------------------------------------------------*/
+        // 기기
         else if(option == "--device" || option == "-d")
         {
             if(!OptionDevice(&currentDev, argument, options))
@@ -409,9 +373,7 @@ bool ProcessOptions(int argc, char *argv[], Options *options)
             }
         }
 
-        /*---------------------------------------------------------*\
-        | -c / --color                                              |
-        \*---------------------------------------------------------*/
+        // 색
         else if(option == "--color" || option == "-c")
         {
             if(!OptionColor(&currentDev, argument, options))
@@ -420,9 +382,7 @@ bool ProcessOptions(int argc, char *argv[], Options *options)
             }
         }
 
-        /*---------------------------------------------------------*\
-        | -m / --mode                                               |
-        \*---------------------------------------------------------*/
+        // 모드
         else if(option == "--mode" || option == "-m")
         {
             if(!OptionMode(&currentDev, argument, options))
@@ -431,24 +391,13 @@ bool ProcessOptions(int argc, char *argv[], Options *options)
             }
         }
 
-        /*
-        else if(option == "--profile" || option == "-p")
-        {
-            OptionProfile(argument);
-            exit(0);
-        }*/
-
-        /*---------------------------------------------------------*\
-        | -sp / --save-profile                                      |
-        \*---------------------------------------------------------*/
+        // 프로필 저장
         else if(option == "--save-profile" || option == "-sp")
         {
             OptionSaveProfile(argument);
         }
 
-        /*---------------------------------------------------------*\
-        | Invalid option                                            |
-        \*---------------------------------------------------------*/
+        // invaild option
         else
         {
             std::cout << "Error: Invalid option: " + option << std::endl;
@@ -458,10 +407,7 @@ bool ProcessOptions(int argc, char *argv[], Options *options)
         arg_index++;
     }
 
-    /*---------------------------------------------------------*\
-    | If a device was specified, check to verify that a         |
-    | corresponding option was also specified                   |
-    \*---------------------------------------------------------*/
+    // 기기가 특정되면 이에 대응하는 옵션들도 특정되는 지 확인
     if(options->hasDevice)
     {
         for(std::size_t option_idx = 0; option_idx < options->devices.size(); option_idx++)
@@ -485,16 +431,11 @@ void ApplyOptions(DeviceOptions& options)
 {
     RGBController *device = rgb_controllers[options.device];
 
-    /*---------------------------------------------------------*\
-    | Set mode first, in case it's 'direct' (which affects      |
-    | SetLED below)                                             |
-    \*---------------------------------------------------------*/
+    // 모드가 'direct'이면 모드 먼저 설정
     unsigned int mode = ParseMode(options);
 
-    /*---------------------------------------------------------*\
-    | Determine which color mode this mode uses and update      |
-    | colors accordingly                                        |
-    \*---------------------------------------------------------*/
+    // 어떤 색 모드가 사용되는지 결정
+    // 색을 통일되게 업데이트
     switch(device->modes[mode].color_mode)
     {
         case MODE_COLORS_NONE:
@@ -542,14 +483,11 @@ void ApplyOptions(DeviceOptions& options)
             break;
     }
 
-    /*---------------------------------------------------------*\
-    | Set device mode                                           |
-    \*---------------------------------------------------------*/
+
+    // 기기 모드 설정
     device->SetMode(mode);
 
-    /*---------------------------------------------------------*\
-    | Set device per-LED colors if necessary                    |
-    \*---------------------------------------------------------*/
+    // 지원하는 경우에만 각 LED 색 설정
     if(device->modes[mode].color_mode == MODE_COLORS_PER_LED)
     {
         device->UpdateLEDs();
@@ -561,9 +499,7 @@ int cli_main(int argc, char *argv[], std::vector<RGBController *> rgb_controller
     rgb_controllers = rgb_controllers_in;
     profile_manager = profile_manager_in;
 
-    /*---------------------------------------------------------*\
-    | Process the argument options                              |
-    \*---------------------------------------------------------*/
+    // options argument 처리
     Options options;
     if (!ProcessOptions(argc, argv, &options))
     {
@@ -571,11 +507,8 @@ int cli_main(int argc, char *argv[], std::vector<RGBController *> rgb_controller
         return -1;
     }
 
-    /*---------------------------------------------------------*\
-    | If the options has one or more specific devices, loop     |
-    | through all of the specific devices and apply settings.   |
-    | Otherwise, apply settings to all devices.                 |
-    \*---------------------------------------------------------*/
+    // 옵션이 하나 이상의 특정된 기기를 가진다면 모든 특정된 기기를 루프하면서 설정을 적용
+    // 아니면 모든 새팅을 모든 기기에 적용
     if (options.hasDevice)
     {
         for(std::size_t device_idx = 0; device_idx < options.devices.size(); device_idx++)
@@ -592,9 +525,7 @@ int cli_main(int argc, char *argv[], std::vector<RGBController *> rgb_controller
         }
     }
 
-    /*---------------------------------------------------------*\
-    | If there is a save filename set, save the profile         |
-    \*---------------------------------------------------------*/
+    // 파일 이름이 존재하면 프로필 파일을 저장함
     if(profile_save_filename != "")
     {
         if(profile_manager->SaveProfile(profile_save_filename))

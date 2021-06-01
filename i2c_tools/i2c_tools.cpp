@@ -1,17 +1,12 @@
 #include "i2c_tools.h"
 
-/******************************************************************************************\
-*                                                                                          *
-*   i2c_detect                                                                             *
-*                                                                                          *
-*       Prints a list of all detected I2C addresses on the given bus                       *
-*                                                                                          *
-*           bus - pointer to i2c_smbus_interface to scan                                   *
-*           mode - one of AUTO, QUICK, READ, FUNC - method of access                       *
-*                                                                                          *
-*       Code adapted from i2cdetect.c from i2c-tools Linux package                         *
-*                                                                                          *
-\******************************************************************************************/
+/*
+ * i2c detect
+ * 주어진 버스의 감지된 모든 i2c 주소를 리스트로 만든다
+ * bus - 스캔한 i2c_smbus_interface 포인터
+ * mode - AUTO, QUICKM, RED, FUNC: 접근 방식
+ * 리눅스 패키지의 i2cdetect.c의 i2c-tools 참고함
+*/
 
 std::string i2c_detect(i2c_smbus_interface * bus, int mode)
 {
@@ -32,7 +27,7 @@ std::string i2c_detect(i2c_smbus_interface * bus, int mode)
 
         for (j = 0; j < 16; j++)
         {
-            /* Skip unwanted addresses */
+            // 필요없는 주소 건너뛰기
 			if (i+j < first || i+j > last)
             {
                 sprintf(line, "   ");
@@ -40,10 +35,10 @@ std::string i2c_detect(i2c_smbus_interface * bus, int mode)
 				continue;
 			}
 
-            /* Set slave address */
+            // slave address 설정
             slave_addr = i + j;
 
-            /* Probe this address */
+            // 해당 주소 찾기
             switch (mode)
             {
             case MODE_QUICK:
@@ -90,6 +85,12 @@ std::string i2c_detect(i2c_smbus_interface * bus, int mode)
 *           address - SMBus device address to scan                                         *
 *                                                                                          *
 \******************************************************************************************/
+/*
+ * i2c_dump
+ * 주어진 SMBus 기기의 주소 값을 반환함
+ * bus - 스캔한 i2c_smbus_interface 포인터
+ * address - 스캔한 SMBus 기기
+*/
 
 std::string i2c_dump(i2c_smbus_interface * bus, unsigned char address)
 {

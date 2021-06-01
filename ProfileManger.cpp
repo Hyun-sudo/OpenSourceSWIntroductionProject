@@ -19,28 +19,20 @@ ProfileManager::~ProfileManager()
 
 bool ProfileManager::SaveProfile(std::string profile_name)
 {
-    /*---------------------------------------------------------*\
-    | If a name was entered, save the profile file              |
-    \*---------------------------------------------------------*/
+    // 이름이 입력되면 프로필 파일을 저장함
     if(profile_name != "")
     {
-        /*---------------------------------------------------------*\
-        | Open an output file in binary mode                        |
-        \*---------------------------------------------------------*/
+        // 아웃풋 파일을 바이너리 모드로 열기
         std::ofstream controller_file(profile_name, std::ios::out | std::ios::binary);
 
-        /*---------------------------------------------------------*\
-        | Write header                                              |
-        | 16 bytes - "OPENRGB_PROFILE"                              |
-        | 4 bytes - Version, unsigned int                           |
-        \*---------------------------------------------------------*/
+        // 헤더 작성
+        // 16 bytes - "RGBSYNC_PROFILE"
+        // 4 bytes - Version, unsigned int
         unsigned int profile_version = 1;
-        controller_file.write("OPENRGB_PROFILE", 16);
+        controller_file.write("RGBSYNC_PROFILE", 16);
         controller_file.write((char *)&profile_version, sizeof(unsigned int));
 
-        /*---------------------------------------------------------*\
-        | Write controller data for each controller                 |
-        \*---------------------------------------------------------*/
+        // 각 컨트롤러 당 컨트롤러 데이터 쓰기
         for(std::size_t controller_index = 0; controller_index < controllers.size(); controller_index++)
         {
             unsigned char *controller_data = controllers[controller_index]->GetDeviceDescription();
@@ -51,14 +43,10 @@ bool ProfileManager::SaveProfile(std::string profile_name)
             controller_file.write((const char *)controller_data, controller_size);
         }
 
-        /*---------------------------------------------------------*\
-        | Close the file when done                                  |
-        \*---------------------------------------------------------*/
+        // 완료되면 파일 닫기
         controller_file.close();
 
-        /*---------------------------------------------------------*\
-        | Update the profile list                                   |
-        \*---------------------------------------------------------*/
+        // 프로필 리스트 업데이트
         UpdateProfileList();
 
         return(true);
@@ -94,14 +82,10 @@ bool ProfileManager::LoadProfileWithOptions
 
     std::string filename = profile_name;
 
-    /*---------------------------------------------------------*\
-    | Open input file in binary mode                            |
-    \*---------------------------------------------------------*/
+    // 인풋 파일을 바이너리 모드로 열기
     std::ifstream controller_file(filename, std::ios::in | std::ios::binary);
 
-    /*---------------------------------------------------------*\
-    | Read and verify file header                               |
-    \*---------------------------------------------------------*/
+    // 파일 헤더 읽기 및 확인
     char            header_string[16];
     unsigned int    header_version;
 
@@ -111,13 +95,11 @@ bool ProfileManager::LoadProfileWithOptions
     controller_offset += 16 + sizeof(unsigned int);
     controller_file.seekg(controller_offset);
 
-    if(strcmp(header_string, "OPENRGB_PROFILE") == 0)
+    if(strcmp(header_string, "RGBSYNC_PROFILE") == 0)
     {
         if(header_version == 1)
         {
-            /*---------------------------------------------------------*\
-            | Read controller data from file until EOF                  |
-            \*---------------------------------------------------------*/
+            // 컨트롤러 데이터를 EOF까지 읽기
             while(!(controller_file.peek() == EOF))
             {
                 controller_file.read((char *)&controller_size, sizeof(controller_size));
@@ -143,10 +125,7 @@ bool ProfileManager::LoadProfileWithOptions
                 ret_val = true;
             }
 
-            /*---------------------------------------------------------*\
-            | Loop through all controllers.  For each controller, search|
-            | all saved controllers until a match is found              |
-            \*---------------------------------------------------------*/
+            // 저장된 모든 컨트롤러를 루프하면서 일치하는 것을 찾음
             for(std::size_t controller_index = 0; controller_index < controllers.size(); controller_index++)
             {
                 RGBController *controller_ptr = controllers[controller_index];
@@ -155,9 +134,7 @@ bool ProfileManager::LoadProfileWithOptions
                 {
                     RGBController *temp_controller = temp_controllers[temp_index];
 
-                    /*---------------------------------------------------------*\
-                    | Test if saved controller data matches this controller     |
-                    \*---------------------------------------------------------*/
+                    // 저장된 컨트롤러 데이터가 이 컨트롤러가 맞는지 확인
                     if((temp_controller_used[temp_index] == false                  )
                      &&(temp_controller->type        == controller_ptr->type       )
                      &&(temp_controller->name        == controller_ptr->name       )
@@ -166,9 +143,7 @@ bool ProfileManager::LoadProfileWithOptions
                      &&(temp_controller->serial      == controller_ptr->serial     )
                      &&(temp_controller->location    == controller_ptr->location   ))
                     {
-                        /*---------------------------------------------------------*\
-                        | Update zone sizes if requested                            |
-                        \*---------------------------------------------------------*/
+                        // 필요하면 zone 크기 업데이트
                         if(load_size)
                         {
                             if(temp_controller->zones.size() == controller_ptr->zones.size())
@@ -187,14 +162,10 @@ bool ProfileManager::LoadProfileWithOptions
                             }
                         }
 
-                        /*---------------------------------------------------------*\
-                        | Update settings if requested                              |
-                        \*---------------------------------------------------------*/
+                        // 필요하면 설정 업데이트
                         if(load_settings)
                         {
-                            /*---------------------------------------------------------*\
-                            | Update all modes                                          |
-                            \*---------------------------------------------------------*/
+                            // 모든 모드 업데이트
                             if(temp_controller->modes.size() == controller_ptr->modes.size())
                             {
                                 for(std::size_t mode_index = 0; mode_index < temp_controller->modes.size(); mode_index++)
@@ -223,10 +194,7 @@ bool ProfileManager::LoadProfileWithOptions
 
                                 controller_ptr->active_mode = temp_controller->active_mode;
                             }
-
-                            /*---------------------------------------------------------*\
-                            | Update all colors                                         |
-                            \*---------------------------------------------------------*/
+                            // 모든 색 업데이트
                             if(temp_controller->colors.size() == controller_ptr->colors.size())
                             {
                                 for(std::size_t color_index = 0; color_index < temp_controller->colors.size(); color_index++)
@@ -259,36 +227,28 @@ void ProfileManager::UpdateProfileList()
 {
     profile_list.clear();
 
-    /*---------------------------------------------------------*\
-    | Load profiles by looking for .orp files in current dir    |
-    \*---------------------------------------------------------*/
+    // 현재 디렉토리에서 확장자를 찾아서 프로필 로드
     for(const auto & entry : fs::directory_iterator("."))
     {
         std::string filename = entry.path().filename().string();
 
         if(filename.find(".orp") != std::string::npos)
         {
-            /*---------------------------------------------------------*\
-            | Open input file in binary mode                            |
-            \*---------------------------------------------------------*/
+            // 인풋 파일을 바이너리 모드로 열기
             std::ifstream profile_file(filename, std::ios::in | std::ios::binary);
 
-            /*---------------------------------------------------------*\
-            | Read and verify file header                               |
-            \*---------------------------------------------------------*/
+            // 헤더 파일 읽기 및 확인
             char            header_string[16];
             unsigned int    header_version;
 
             profile_file.read(header_string, 16);
             profile_file.read((char *)&header_version, sizeof(unsigned int));
 
-            if(strcmp(header_string, "OPENRGB_PROFILE") == 0)
+            if(strcmp(header_string, "RGBSYNC_PROFILE") == 0)
             {
                 if(header_version == 1)
                 {
-                    /*---------------------------------------------------------*\
-                    | Add this profile to the list                              |
-                    \*---------------------------------------------------------*/
+                    // 프로필을 리스트에 추가
                     profile_list.push_back(filename);
                 }
             }

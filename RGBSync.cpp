@@ -1,11 +1,3 @@
-/******************************************************************************************\
-*                                                                                          *
-*   OpenRGB.cpp                                                                            *
-*                                                                                          *
-*       Functions for communicating with RGBController API devices on Windows and Linux    *
-*                                                                                          *
-\******************************************************************************************/
-
 #include "RGBController.h"
 #include "i2c_smbus.h"
 #include <vector>
