@@ -1,11 +1,8 @@
-/*-----------------------------------------*\
-|  AuraSMBusController.cpp                  |
-|                                           |
-|  Driver for ASUS Aura RGB lighting        |
-|  controller                               |
-|                                           |
-|  Adam Honse (CalcProgrammer1) 8/19/2018   |
-\*-----------------------------------------*/
+/*
+ * AuraSMBusContoller.cpp
+ * ASUS Aura RGB lighting 컨트롤러에 대한 정의와 타입
+*/
+
 
 #include "AuraSMBusController.h"
 #include <cstring>

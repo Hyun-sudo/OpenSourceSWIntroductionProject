@@ -17,7 +17,7 @@ RGBDialog02::RGBDialog02(std::vector<i2c_smbus_interface *>& bus, std::vector<RG
     ui(new Ui::RGBDialog02Ui)
 {
     ui->setupUi(this);
-    QIcon logo(":OpenRGB.png");
+    QIcon logo(":RGBSync.png");
     setWindowIcon(logo);
 
     /*-----------------------------------------------------*\
@@ -76,7 +76,7 @@ RGBDialog02::RGBDialog02(std::vector<i2c_smbus_interface *>& bus, std::vector<RG
     trayIconMenu->addAction(actionExit);
 
     trayIcon->setIcon(logo);
-    trayIcon->setToolTip("OpenRGB");
+    trayIcon->setToolTip("RGBSync");
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->show();
 
@@ -375,7 +375,7 @@ void RGBDialog02::on_ButtonSaveProfile_clicked()
     /*---------------------------------------------------------*\
     | Extension .orp - OpenRgb Profile                          |
     \*---------------------------------------------------------*/
-    std::string filename = profile_name + ".orp";
+    std::string filename = profile_name + ".rsp";
 
     /*---------------------------------------------------------*\
     | Save the profile                                          |

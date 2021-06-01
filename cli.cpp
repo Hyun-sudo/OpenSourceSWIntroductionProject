@@ -556,10 +556,10 @@ void ApplyOptions(DeviceOptions& options)
     }
 }
 
-int cli_main(int argc, char *argv[], std::vector<RGBController *> rgb_controllers_in/*, ProfileManager* profile_manager_in*/)
+int cli_main(int argc, char *argv[], std::vector<RGBController *> rgb_controllers_in, ProfileManager* profile_manager_in)
 {
     rgb_controllers = rgb_controllers_in;
-    //profile_manager = profile_manager_in;
+    profile_manager = profile_manager_in;
 
     /*---------------------------------------------------------*\
     | Process the argument options                              |

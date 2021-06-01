@@ -6,9 +6,7 @@ unsigned char * RGBController::GetDeviceDescription()
     unsigned int data_ptr = 0;
     unsigned int data_size = 0;
 
-    /*---------------------------------------------------------*\
-    | Calculate data size                                       |
-    \*---------------------------------------------------------*/
+    // 데이터 크기 계산
     unsigned short name_len         = strlen(name.c_str())          + 1;
     unsigned short description_len  = strlen(description.c_str())   + 1;
     unsigned short version_len      = strlen(version.c_str())       + 1;
@@ -82,226 +80,157 @@ unsigned char * RGBController::GetDeviceDescription()
     data_size += sizeof(num_colors);
     data_size += num_colors * sizeof(RGBColor);
 
-    /*---------------------------------------------------------*\
-    | Create data buffer                                        |
-    \*---------------------------------------------------------*/
+    // 데이터 버퍼 생성
     unsigned char *data_buf = new unsigned char[data_size];
 
-    /*---------------------------------------------------------*\
-    | Copy in data size                                         |
-    \*---------------------------------------------------------*/
+    // 데이터 크기 복사
     memcpy(&data_buf[data_ptr], &data_size, sizeof(data_size));
     data_ptr += sizeof(data_size);
 
-    /*---------------------------------------------------------*\
-    | Copy in type                                              |
-    \*---------------------------------------------------------*/
+    // 기기 타입 복사
     memcpy(&data_buf[data_ptr], &type, sizeof(device_type));
     data_ptr += sizeof(device_type);
 
-    /*---------------------------------------------------------*\
-    | Copy in name (size+data)                                  |
-    \*---------------------------------------------------------*/
+    // 이름 복사 (size + data)
     memcpy(&data_buf[data_ptr], &name_len, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
     strcpy((char *)&data_buf[data_ptr], name.c_str());
     data_ptr += name_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in description (size+data)                           |
-    \*---------------------------------------------------------*/
+    // 설명 복사 (size + data)
     memcpy(&data_buf[data_ptr], &description_len, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
     strcpy((char *)&data_buf[data_ptr], description.c_str());
     data_ptr += description_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in version (size+data)                               |
-    \*---------------------------------------------------------*/
+    // 버전 복사 (size + data)
     memcpy(&data_buf[data_ptr], &version_len, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
     strcpy((char *)&data_buf[data_ptr], version.c_str());
     data_ptr += version_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in serial (size+data)                                |
-    \*---------------------------------------------------------*/
+    // 시리얼 번호 복사 (size + data)
     memcpy(&data_buf[data_ptr], &serial_len, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
     strcpy((char *)&data_buf[data_ptr], serial.c_str());
     data_ptr += serial_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in location (size+data)                              |
-    \*---------------------------------------------------------*/
+    // 위치 복사 (size + data)
     memcpy(&data_buf[data_ptr], &location_len, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
     strcpy((char *)&data_buf[data_ptr], location.c_str());
     data_ptr += location_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in number of modes (data)                            |
-    \*---------------------------------------------------------*/
+    // 모드 복사
     memcpy(&data_buf[data_ptr], &num_modes, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
-    /*---------------------------------------------------------*\
-    | Copy in active mode (data)                                |
-    \*---------------------------------------------------------*/
+    // 활성화된 모드 복사
     memcpy(&data_buf[data_ptr], &active_mode, sizeof(active_mode));
     data_ptr += sizeof(active_mode);
 
-    /*---------------------------------------------------------*\
-    | Copy in modes                                             |
-    \*---------------------------------------------------------*/
+    // 2개 이상의 모드 복사
     for(int mode_index = 0; mode_index < num_modes; mode_index++)
     {
-        /*---------------------------------------------------------*\
-        | Copy in mode name (size+data)                             |
-        \*---------------------------------------------------------*/
+        // 모드 이름 복사 (size + data)
         memcpy(&data_buf[data_ptr], &mode_name_len[mode_index], sizeof(unsigned short));
         data_ptr += sizeof(unsigned short);
 
         strcpy((char *)&data_buf[data_ptr], modes[mode_index].name.c_str());
         data_ptr += mode_name_len[mode_index];
 
-        /*---------------------------------------------------------*\
-        | Copy in mode value (data)                                 |
-        \*---------------------------------------------------------*/
+        // 모드 값 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].value, sizeof(modes[mode_index].value));
         data_ptr += sizeof(modes[mode_index].value);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode flags (data)                                 |
-        \*---------------------------------------------------------*/
+        // 모드 플래그 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].flags, sizeof(modes[mode_index].flags));
         data_ptr += sizeof(modes[mode_index].flags);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode speed_min (data)                             |
-        \*---------------------------------------------------------*/
+        // 모드 속도 최솟값 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].speed_min, sizeof(modes[mode_index].speed_min));
         data_ptr += sizeof(modes[mode_index].speed_min);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode speed_max (data)                             |
-        \*---------------------------------------------------------*/
+        // 모드 최댓값 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].speed_max, sizeof(modes[mode_index].speed_max));
         data_ptr += sizeof(modes[mode_index].speed_max);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode colors_min (data)                            |
-        \*---------------------------------------------------------*/
+        // 모드 색 최솟값 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].colors_min, sizeof(modes[mode_index].colors_min));
         data_ptr += sizeof(modes[mode_index].colors_min);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode colors_max (data)                            |
-        \*---------------------------------------------------------*/
+        // 모드 색 최댓값 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].colors_max, sizeof(modes[mode_index].colors_max));
         data_ptr += sizeof(modes[mode_index].colors_max);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode speed (data)                                 |
-        \*---------------------------------------------------------*/
+        // 모드 속도 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].speed, sizeof(modes[mode_index].speed));
         data_ptr += sizeof(modes[mode_index].speed);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode direction (data)                             |
-        \*---------------------------------------------------------*/
+        // 모드 방향 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].direction, sizeof(modes[mode_index].direction));
         data_ptr += sizeof(modes[mode_index].direction);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode color_mode (data)                            |
-        \*---------------------------------------------------------*/
+        // 모드 색 모드 복사
         memcpy(&data_buf[data_ptr], &modes[mode_index].color_mode, sizeof(modes[mode_index].color_mode));
         data_ptr += sizeof(modes[mode_index].color_mode);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode number of colors                             |
-        \*---------------------------------------------------------*/
+        // 모드 색의 수 복사
         memcpy(&data_buf[data_ptr], &mode_num_colors[mode_index], sizeof(unsigned short));
         data_ptr += sizeof(unsigned short);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode mode colors                                  |
-        \*---------------------------------------------------------*/
+        // 모드 색 복사
         for(int color_index = 0; color_index < mode_num_colors[mode_index]; color_index++)
-        {
-            /*---------------------------------------------------------*\
-            | Copy in color (data)                                      |
-            \*---------------------------------------------------------*/
+        {            
             memcpy(&data_buf[data_ptr], &modes[mode_index].colors[color_index], sizeof(modes[mode_index].colors[color_index]));
             data_ptr += sizeof(modes[mode_index].colors[color_index]);
         }
     }
 
-    /*---------------------------------------------------------*\
-    | Copy in number of zones (data)                            |
-    \*---------------------------------------------------------*/
+    // zone 개수 복사
     memcpy(&data_buf[data_ptr], &num_zones, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
-    /*---------------------------------------------------------*\
-    | Copy in zones                                             |
-    \*---------------------------------------------------------*/
+    // zone 복사
     for(int zone_index = 0; zone_index < num_zones; zone_index++)
     {
-        /*---------------------------------------------------------*\
-        | Copy in zone name (size+data)                             |
-        \*---------------------------------------------------------*/
+        // zone 이름 복사 (size + data)
         memcpy(&data_buf[data_ptr], &zone_name_len[zone_index], sizeof(unsigned short));
         data_ptr += sizeof(unsigned short);
 
         strcpy((char *)&data_buf[data_ptr], zones[zone_index].name.c_str());
         data_ptr += zone_name_len[zone_index];
 
-        /*---------------------------------------------------------*\
-        | Copy in zone type (data)                                  |
-        \*---------------------------------------------------------*/
+        // zone 타입 복사
         memcpy(&data_buf[data_ptr], &zones[zone_index].type, sizeof(zones[zone_index].type));
         data_ptr += sizeof(zones[zone_index].type);
 
-        /*---------------------------------------------------------*\
-        | Copy in zone minimum LED count (data)                     |
-        \*---------------------------------------------------------*/
+        // zone LED 최소 개수
         memcpy(&data_buf[data_ptr], &zones[zone_index].leds_min, sizeof(zones[zone_index].leds_min));
         data_ptr += sizeof(zones[zone_index].leds_min);
 
-        /*---------------------------------------------------------*\
-        | Copy in zone maximum LED count (data)                     |
-        \*---------------------------------------------------------*/
+        // zone LED 최대 개수
         memcpy(&data_buf[data_ptr], &zones[zone_index].leds_max, sizeof(zones[zone_index].leds_max));
         data_ptr += sizeof(zones[zone_index].leds_max);
 
-        /*---------------------------------------------------------*\
-        | Copy in zone LED count (data)                             |
-        \*---------------------------------------------------------*/
+        // zone LED 개수
         memcpy(&data_buf[data_ptr], &zones[zone_index].leds_count, sizeof(zones[zone_index].leds_count));
         data_ptr += sizeof(zones[zone_index].leds_count);
     }
 
-    /*---------------------------------------------------------*\
-    | Copy in number of LEDs (data)                             |
-    \*---------------------------------------------------------*/
+    // LED 개수 복사
     memcpy(&data_buf[data_ptr], &num_leds, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
-    /*---------------------------------------------------------*\
-    | Copy in LEDs                                              |
-    \*---------------------------------------------------------*/
+    // LED 복사
     for(int led_index = 0; led_index < num_leds; led_index++)
     {
-        /*---------------------------------------------------------*\
-        | Copy in LED name (size+data)                              |
-        \*---------------------------------------------------------*/
+        // LED 이름 복사 (size + data)
         unsigned short ledname_len = strlen(leds[led_index].name.c_str()) + 1;
         memcpy(&data_buf[data_ptr], &ledname_len, sizeof(unsigned short));
         data_ptr += sizeof(unsigned short);
@@ -309,27 +238,18 @@ unsigned char * RGBController::GetDeviceDescription()
         strcpy((char *)&data_buf[data_ptr], leds[led_index].name.c_str());
         data_ptr += ledname_len;
 
-        /*---------------------------------------------------------*\
-        | Copy in LED value (data)                                  |
-        \*---------------------------------------------------------*/
+        // LED 값 복사
         memcpy(&data_buf[data_ptr], &leds[led_index].value, sizeof(leds[led_index].value));
         data_ptr += sizeof(leds[led_index].value);
     }
 
-    /*---------------------------------------------------------*\
-    | Copy in number of colors (data)                           |
-    \*---------------------------------------------------------*/
+    // 색 개수 복사
     memcpy(&data_buf[data_ptr], &num_colors, sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
-    /*---------------------------------------------------------*\
-    | Copy in colors                                            |
-    \*---------------------------------------------------------*/
+    // 색 복사
     for(int color_index = 0; color_index < num_colors; color_index++)
     {
-        /*---------------------------------------------------------*\
-        | Copy in color (data)                                      |
-        \*---------------------------------------------------------*/
         memcpy(&data_buf[data_ptr], &colors[color_index], sizeof(colors[color_index]));
         data_ptr += sizeof(colors[color_index]);
     }
@@ -350,15 +270,11 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
 
     data_ptr += sizeof(unsigned int);
 
-    /*---------------------------------------------------------*\
-    | Copy in type                                              |
-    \*---------------------------------------------------------*/
+    // 기기 타입 복사
     memcpy(&type, &data_buf[data_ptr], sizeof(device_type));
     data_ptr += sizeof(device_type);
 
-    /*---------------------------------------------------------*\
-    | Copy in name                                              |
-    \*---------------------------------------------------------*/
+    // 이름 복사 (size + data)
     unsigned short name_len;
     memcpy(&name_len, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
@@ -366,9 +282,7 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
     name = (char *)&data_buf[data_ptr];
     data_ptr += name_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in description                                       |
-    \*---------------------------------------------------------*/
+    // 설명 복사 (size + data)
     unsigned short description_len;
     memcpy(&description_len, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
@@ -376,9 +290,7 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
     description = (char *)&data_buf[data_ptr];
     data_ptr += description_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in version                                           |
-    \*---------------------------------------------------------*/
+    // 버전 복사 (size + data)
     unsigned short version_len;
     memcpy(&version_len, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
@@ -386,9 +298,7 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
     version = (char *)&data_buf[data_ptr];
     data_ptr += version_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in serial                                            |
-    \*---------------------------------------------------------*/
+    // 시리얼 번호 복사 (size + data)
     unsigned short serial_len;
     memcpy(&serial_len, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
@@ -396,39 +306,28 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
     serial = (char *)&data_buf[data_ptr];
     data_ptr += serial_len;
 
-    /*---------------------------------------------------------*\
-    | Copy in location                                          |
-    \*---------------------------------------------------------*/
+    // 위치 복사 (size + data)
     unsigned short location_len;
     memcpy(&location_len, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
     location = (char *)&data_buf[data_ptr];
     data_ptr += location_len;
-
-    /*---------------------------------------------------------*\
-    | Copy in number of modes (data)                            |
-    \*---------------------------------------------------------*/
+    // 모드 개수 복사
     unsigned short num_modes;
     memcpy(&num_modes, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
-    /*---------------------------------------------------------*\
-    | Copy in active mode (data)                                |
-    \*---------------------------------------------------------*/
+    // 활성화 모드 복사
     memcpy(&active_mode, &data_buf[data_ptr], sizeof(active_mode));
     data_ptr += sizeof(active_mode);
 
-    /*---------------------------------------------------------*\
-    | Copy in modes                                             |
-    \*---------------------------------------------------------*/
+    // 모드 복사
     for(int mode_index = 0; mode_index < num_modes; mode_index++)
     {
         mode new_mode;
 
-        /*---------------------------------------------------------*\
-        | Copy in mode name (size+data)                             |
-        \*---------------------------------------------------------*/
+        // 모드 이름 복사 (size + data)
         unsigned short modename_len;
         memcpy(&modename_len, &data_buf[data_ptr], sizeof(unsigned short));
         data_ptr += sizeof(unsigned short);
@@ -436,75 +335,50 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
         new_mode.name = (char *)&data_buf[data_ptr];
         data_ptr += modename_len;
 
-        /*---------------------------------------------------------*\
-        | Copy in mode value (data)                                 |
-        \*---------------------------------------------------------*/
+        // 모드 값 복사
         memcpy(&new_mode.value, &data_buf[data_ptr], sizeof(new_mode.value));
         data_ptr += sizeof(new_mode.value);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode flags (data)                                 |
-        \*---------------------------------------------------------*/
+        // 모드 플래그
         memcpy(&new_mode.flags, &data_buf[data_ptr], sizeof(new_mode.flags));
         data_ptr += sizeof(new_mode.flags);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode speed_min (data)                             |
-        \*---------------------------------------------------------*/
+        // 모드 속도 최솟값 복사
         memcpy(&new_mode.speed_min, &data_buf[data_ptr], sizeof(new_mode.speed_min));
         data_ptr += sizeof(new_mode.speed_min);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode speed_max (data)                             |
-        \*---------------------------------------------------------*/
+        // 모드 속도 최댓값 복사
         memcpy(&new_mode.speed_max, &data_buf[data_ptr], sizeof(new_mode.speed_max));
         data_ptr += sizeof(new_mode.speed_max);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode colors_min (data)                            |
-        \*---------------------------------------------------------*/
+        // 모드 색 최솟값 복사
         memcpy(&new_mode.colors_min, &data_buf[data_ptr], sizeof(new_mode.colors_min));
         data_ptr += sizeof(new_mode.colors_min);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode colors_max (data)                            |
-        \*---------------------------------------------------------*/
+        // 모드 색 최댓값 복사
         memcpy(&new_mode.colors_max, &data_buf[data_ptr], sizeof(new_mode.colors_max));
         data_ptr += sizeof(new_mode.colors_max);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode speed (data)                                 |
-        \*---------------------------------------------------------*/
+        // 모드 속도 복사
         memcpy(&new_mode.speed, &data_buf[data_ptr], sizeof(new_mode.speed));
         data_ptr += sizeof(new_mode.speed);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode direction (data)                             |
-        \*---------------------------------------------------------*/
+        // 모드 방향 복사
         memcpy(&new_mode.direction, &data_buf[data_ptr], sizeof(new_mode.direction));
         data_ptr += sizeof(new_mode.direction);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode color_mode (data)                            |
-        \*---------------------------------------------------------*/
+        // 모드 색 모드 복사
         memcpy(&new_mode.color_mode, &data_buf[data_ptr], sizeof(new_mode.color_mode));
         data_ptr += sizeof(new_mode.color_mode);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode number of colors                             |
-        \*---------------------------------------------------------*/
+        // 모드 색 개수 복사
         unsigned short mode_num_colors;
         memcpy(&mode_num_colors, &data_buf[data_ptr], sizeof(unsigned short));
         data_ptr += sizeof(unsigned short);
 
-        /*---------------------------------------------------------*\
-        | Copy in mode mode colors                                  |
-        \*---------------------------------------------------------*/
+        // 모드 모드 색 복사
         for(int color_index = 0; color_index < mode_num_colors; color_index++)
         {
-            /*---------------------------------------------------------*\
-            | Copy in color (data)                                      |
-            \*---------------------------------------------------------*/
             RGBColor new_color;
             memcpy(&new_color, &data_buf[data_ptr], sizeof(RGBColor));
             data_ptr += sizeof(modes[mode_index].colors[color_index]);
@@ -515,23 +389,17 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
         modes.push_back(new_mode);
     }
 
-    /*---------------------------------------------------------*\
-    | Copy in number of zones (data)                            |
-    \*---------------------------------------------------------*/
+    // zone의 개수 복사
     unsigned short num_zones;
     memcpy(&num_zones, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
-    /*---------------------------------------------------------*\
-    | Copy in zones                                             |
-    \*---------------------------------------------------------*/
+    // zone 복사
     for(int zone_index = 0; zone_index < num_zones; zone_index++)
     {
         zone new_zone;
 
-        /*---------------------------------------------------------*\
-        | Copy in zone name (size+data)                             |
-        \*---------------------------------------------------------*/
+        // zone 이름 복사 (size + data)
         unsigned short zonename_len;
         memcpy(&zonename_len, &data_buf[data_ptr], sizeof(unsigned short));
         data_ptr += sizeof(unsigned short);
@@ -539,50 +407,36 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
         new_zone.name = (char *)&data_buf[data_ptr];
         data_ptr += zonename_len;
 
-        /*---------------------------------------------------------*\
-        | Copy in zone type (data)                                  |
-        \*---------------------------------------------------------*/
+        // zone 타입 복사
         memcpy(&new_zone.type, &data_buf[data_ptr], sizeof(new_zone.type));
         data_ptr += sizeof(new_zone.type);
 
-        /*---------------------------------------------------------*\
-        | Copy in zone minimum LED count (data)                     |
-        \*---------------------------------------------------------*/
+        // zone LED 최솟값 복사
         memcpy(&new_zone.leds_min, &data_buf[data_ptr], sizeof(new_zone.leds_min));
         data_ptr += sizeof(new_zone.leds_min);
 
-        /*---------------------------------------------------------*\
-        | Copy in zone maximum LED count (data)                     |
-        \*---------------------------------------------------------*/
+        // zone LED 최댓값 복사
         memcpy(&new_zone.leds_max, &data_buf[data_ptr], sizeof(new_zone.leds_max));
         data_ptr += sizeof(new_zone.leds_max);
 
-        /*---------------------------------------------------------*\
-        | Copy in zone LED count (data)                             |
-        \*---------------------------------------------------------*/
+        // zone LED 개수 복사
         memcpy(&new_zone.leds_count, &data_buf[data_ptr], sizeof(new_zone.leds_count));
         data_ptr += sizeof(new_zone.leds_count);
 
         zones.push_back(new_zone);
     }
 
-    /*---------------------------------------------------------*\
-    | Copy in number of LEDs (data)                             |
-    \*---------------------------------------------------------*/
+    // LED 개수 복사
     unsigned short num_leds;
     memcpy(&num_leds, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
-    /*---------------------------------------------------------*\
-    | Copy in LEDs                                              |
-    \*---------------------------------------------------------*/
+    // LED 복사
     for(int led_index = 0; led_index < num_leds; led_index++)
     {
         led new_led;
 
-        /*---------------------------------------------------------*\
-        | Copy in LED name (size+data)                              |
-        \*---------------------------------------------------------*/
+        // LED 이름 복사 (size + data)
         unsigned short ledname_len;
         memcpy(&ledname_len, &data_buf[data_ptr], sizeof(unsigned short));
         data_ptr += sizeof(unsigned short);
@@ -590,32 +444,23 @@ void RGBController::ReadDeviceDescription(unsigned char* data_buf)
         new_led.name = (char *)&data_buf[data_ptr];
         data_ptr += ledname_len;
 
-        /*---------------------------------------------------------*\
-        | Copy in LED value (data)                                  |
-        \*---------------------------------------------------------*/
+        // LED 값 복사
         memcpy(&new_led.value, &data_buf[data_ptr], sizeof(new_led.value));
         data_ptr += sizeof(new_led.value);
 
         leds.push_back(new_led);
     }
 
-    /*---------------------------------------------------------*\
-    | Copy in number of colors (data)                           |
-    \*---------------------------------------------------------*/
+    // 색 개수 복사
     unsigned short num_colors;
     memcpy(&num_colors, &data_buf[data_ptr], sizeof(unsigned short));
     data_ptr += sizeof(unsigned short);
 
-    /*---------------------------------------------------------*\
-    | Copy in colors                                            |
-    \*---------------------------------------------------------*/
+    // 색 복사
     for(int color_index = 0; color_index < num_colors; color_index++)
     {
         RGBColor new_color;
 
-        /*---------------------------------------------------------*\
-        | Copy in color (data)                                      |
-        \*---------------------------------------------------------*/
         memcpy(&new_color, &data_buf[data_ptr], sizeof(RGBColor));
         data_ptr += sizeof(RGBColor);
 
@@ -627,9 +472,7 @@ void RGBController::SetupColors()
 {
     unsigned int total_led_count;
 
-    /*---------------------------------------------------------*\
-    | Determine total number of LEDs on the device              |
-    \*---------------------------------------------------------*/
+    // 기기의 LED 총 개수 결정
     total_led_count = 0;
 
     for(std::size_t zone_idx = 0; zone_idx < zones.size(); zone_idx++)
@@ -637,14 +480,10 @@ void RGBController::SetupColors()
         total_led_count += zones[zone_idx].leds_count;
     }
 
-    /*---------------------------------------------------------*\
-    | Set the size of the color buffer to the number of LEDs    |
-    \*---------------------------------------------------------*/
+    // LED 수에 따른 색 버퍼 크기 설정
     colors.resize(total_led_count);
 
-    /*---------------------------------------------------------*\
-    | Set the color buffer pointers on each zone                |
-    \*---------------------------------------------------------*/
+    // 각 zone에 따른 색 버퍼 포인터 지정
     total_led_count = 0;
 
     for(std::size_t zone_idx = 0; zone_idx < zones.size(); zone_idx++)

@@ -1,11 +1,7 @@
-/*-----------------------------------------*\
-|  AuraSMBusController.h                    |
-|                                           |
-|  Definitions and types for ASUS Aura RGB  |
-|  lighting controller                      |
-|                                           |
-|  Adam Honse (CalcProgrammer1) 8/19/2018   |
-\*-----------------------------------------*/
+/*
+ * AuraSMBusContoller.h
+ * ASUS Aura RGB lighting 컨트롤러에 대한 정의와 타입
+*/
 
 #include <string>
 #include "i2c_smbus.h"
@@ -15,58 +11,58 @@
 typedef unsigned char	aura_dev_id;
 typedef unsigned short	aura_register;
 
-#define AURA_APPLY_VAL  0x01                /* Value for Apply Changes Register     */
+#define AURA_APPLY_VAL  0x01               // Apply Change 레지스터
 
 enum
 {
-    AURA_REG_DEVICE_NAME                = 0x1000,   /* Device String 16 bytes               */
-    AURA_REG_CONFIG_TABLE               = 0x1C00,   /* Start of LED configuration bytes     */
-    AURA_REG_COLORS_DIRECT              = 0x8000,   /* Colors for Direct Mode 15 bytes      */
-    AURA_REG_COLORS_EFFECT              = 0x8010,   /* Colors for Internal Effects 15 bytes */
-    AURA_REG_DIRECT                     = 0x8020,   /* "Direct Access" Selection Register   */
-    AURA_REG_MODE                       = 0x8021,   /* AURA Mode Selection Register         */
-    AURA_REG_APPLY                      = 0x80A0,   /* AURA Apply Changes Register          */
-    AURA_REG_SLOT_INDEX                 = 0x80F8,   /* AURA Slot Index Register (RAM only)  */
-    AURA_REG_I2C_ADDRESS                = 0x80F9,   /* AURA I2C Address Register (RAM only) */
-    AURA_REG_COLORS_DIRECT_V2           = 0x8100,   /* Direct Colors (v2) 30 bytes          */
-    AURA_REG_COLORS_EFFECT_V2           = 0x8160,   /* Internal Colors (v2) 30 bytes        */
+    AURA_REG_DEVICE_NAME                = 0x1000,   // 기기 스트링 16 바이트
+    AURA_REG_CONFIG_TABLE               = 0x1C00,   // LED 구성 바이트
+    AURA_REG_COLORS_DIRECT              = 0x8000,   // 다이렉트 모드 색들 15바이트
+    AURA_REG_COLORS_EFFECT              = 0x8010,   // 색 효과 15바이트
+    AURA_REG_DIRECT                     = 0x8020,   // 다이렉트 선택 레지스터
+    AURA_REG_MODE                       = 0x8021,   // Aura Mode 선택 레지스터
+    AURA_REG_APPLY                      = 0x80A0,   // Aura Apply Change 레지스터
+    AURA_REG_SLOT_INDEX                 = 0x80F8,   // (RAM) Aura Slot 인덱스 레지스터
+    AURA_REG_I2C_ADDRESS                = 0x80F9,   // (RAM) Aura I2C 주소 레지스터
+    AURA_REG_COLORS_DIRECT_V2           = 0x8100,   // 다이렉트 모드 색 (v2) 30 바이트
+    AURA_REG_COLORS_EFFECT_V2           = 0x8160,   // 색 효과 (v2) 30바이트
 };
 
 enum
 {
-    AURA_MODE_OFF                       = 0,        /* OFF mode                             */
-    AURA_MODE_STATIC                    = 1,        /* Static color mode                    */
-    AURA_MODE_BREATHING                 = 2,        /* Breathing effect mode                */
-    AURA_MODE_FLASHING                  = 3,        /* Flashing effect mode                 */
-    AURA_MODE_SPECTRUM_CYCLE            = 4,        /* Spectrum Cycle mode                  */
-    AURA_MODE_RAINBOW                   = 5,        /* Rainbow effect mode                  */
-    AURA_MODE_SPECTRUM_CYCLE_BREATHING  = 6,        /* Rainbow Breathing effect mode        */
-    AURA_MODE_CHASE_FADE                = 7,        /* Chase with Fade effect mode          */
-    AURA_MODE_SPECTRUM_CYCLE_CHASE_FADE = 8,        /* Chase with Fade, Rainbow effect mode */
-    AURA_MODE_CHASE                     = 9,        /* Chase effect mode                    */
-    AURA_MODE_SPECTRUM_CYCLE_CHASE      = 10,       /* Chase with Rainbow effect mode       */
-    AURA_MODE_SPECTRUM_CYCLE_WAVE       = 11,       /* Wave effect mode                     */
-    AURA_MODE_CHASE_RAINBOW_PULSE       = 12,       /* Chase with  Rainbow Pulse effect mode*/
-    AURA_MODE_RANDOM_FLICKER            = 13,       /* Random flicker effect mode           */
-    AURA_NUMBER_MODES                               /* Number of Aura modes                 */
+    AURA_MODE_OFF                       = 0,
+    AURA_MODE_STATIC                    = 1,
+    AURA_MODE_BREATHING                 = 2,
+    AURA_MODE_FLASHING                  = 3,
+    AURA_MODE_SPECTRUM_CYCLE            = 4,
+    AURA_MODE_RAINBOW                   = 5,
+    AURA_MODE_SPECTRUM_CYCLE_BREATHING  = 6,
+    AURA_MODE_CHASE_FADE                = 7,
+    AURA_MODE_SPECTRUM_CYCLE_CHASE_FADE = 8,
+    AURA_MODE_CHASE                     = 9,
+    AURA_MODE_SPECTRUM_CYCLE_CHASE      = 10,
+    AURA_MODE_SPECTRUM_CYCLE_WAVE       = 11,
+    AURA_MODE_CHASE_RAINBOW_PULSE       = 12,
+    AURA_MODE_RANDOM_FLICKER            = 13,
+    AURA_NUMBER_MODES                           // Aura Mode 개수
 };
 
 enum
 {
-    AURA_LED_CHANNEL_DRAM_2             = 0x05,     /* DRAM LED channel                     */
-    AURA_LED_CHANNEL_CENTER_START       = 0x82,     /* Center zone first LED channel        */
-    AURA_LED_CHANNEL_CENTER             = 0x83,     /* Center zone LED channel              */
-    AURA_LED_CHANNEL_AUDIO              = 0x84,     /* Audio zone LED channel               */
-    AURA_LED_CHANNEL_BACK_IO            = 0x85,     /* Back I/O zone LED channel            */
-    AURA_LED_CHANNEL_RGB_HEADER         = 0x86,     /* RGB Header LED channel               */
-    AURA_LED_CHANNEL_RGB_HEADER_2       = 0x87,     /* RGB Header 2 LED channel             */
-    AURA_LED_CHANNEL_BACKPLATE          = 0x88,     /* Backplate zone LED channel           */
-    AURA_LED_CHANNEL_DRAM               = 0x8A,     /* DRAM LED channel                     */
-    AURA_LED_CHANNEL_PCIE               = 0x8B,     /* PCIe zone LED channel                */
-    AURA_LED_CHANNEL_RGB_HEADER_3       = 0x91,     /* RGB Header 3 LED channel             */
+    AURA_LED_CHANNEL_DRAM_2             = 0x05,     // DRAM LED 채널 (2)
+    AURA_LED_CHANNEL_CENTER_START       = 0x82,     // Center zone의 첫번째 LED 채널
+    AURA_LED_CHANNEL_CENTER             = 0x83,     // Center zone LED 채널
+    AURA_LED_CHANNEL_AUDIO              = 0x84,     // Audio zone LED 채널
+    AURA_LED_CHANNEL_BACK_IO            = 0x85,     // Back I/O zone LED 채널
+    AURA_LED_CHANNEL_RGB_HEADER         = 0x86,     // RGB 해더 1 LED 채널
+    AURA_LED_CHANNEL_RGB_HEADER_2       = 0x87,     // RGB 해더 2 LED 채널
+    AURA_LED_CHANNEL_BACKPLATE          = 0x88,     // 백플레이트 LED 채널
+    AURA_LED_CHANNEL_DRAM               = 0x8A,     // DRAM LED 채널 (1)
+    AURA_LED_CHANNEL_PCIE               = 0x8B,     // PCIe LED 채널
+    AURA_LED_CHANNEL_RGB_HEADER_3       = 0x91,     // RGB 해더 3 LED 채널
 };
 
-static const char* aura_channels[] =                /* Aura channel strings                 */
+static const char* aura_channels[] =
 {
     "Audio",
     "Backplate",

@@ -7,10 +7,7 @@ debug/RGBController_AuraSMBus.o
 debug/RGBController_Dummy.o
 debug/RGBSync.o
 debug/cli.o
-debug/nvapi.o
-debug/hidapi.o
 debug/i2c_smbus.o
-debug/i2c_smbus_piix4.o
 debug/i2c_tools.o
 debug/main.o
 debug/deviceinfopage.o
@@ -22,7 +19,6 @@ debug/rgbdialog02.o
 debug/softwareinfopage.o
 debug/systeminfopage.o
 debug/zoneresizedialog.o
-debug/wmi.o
 debug/qrc_resources.o
 debug/moc_deviceinfopage.o
 debug/moc_devicepage.o

@@ -1,11 +1,7 @@
-/*-----------------------------------------*\
-|  RGBController_AuraSMBus.cpp              |
-|                                           |
-|  Generic RGB Interface for OpenAuraSDK    |
-|  Asus Aura SMBus driver                   |
-|                                           |
-|  Adam Honse (CalcProgrammer1) 6/13/2019   |
-\*-----------------------------------------*/
+/*
+ * RGBController_AuraSMBus.cpp
+ * 제네릭 RGB 인터페이스를 위한 Asus Aura SMBus 드라이버
+*/
 
 #include "RGBController_AuraSMBus.h"
 
@@ -203,7 +199,7 @@ RGBController_AuraSMBus::RGBController_AuraSMBus(AuraSMBusController * aura_ptr)
 
     SetupZones();
 
-    // Initialize active mode
+    // 활성화 모드 초기화
     active_mode = GetDeviceMode();
 }
 

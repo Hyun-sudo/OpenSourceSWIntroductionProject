@@ -7,10 +7,7 @@ release/RGBController_AuraSMBus.o
 release/RGBController_Dummy.o
 release/RGBSync.o
 release/cli.o
-release/nvapi.o
-release/hidapi.o
 release/i2c_smbus.o
-release/i2c_smbus_piix4.o
 release/i2c_tools.o
 release/main.o
 release/deviceinfopage.o
@@ -22,7 +19,6 @@ release/rgbdialog02.o
 release/softwareinfopage.o
 release/systeminfopage.o
 release/zoneresizedialog.o
-release/wmi.o
 release/qrc_resources.o
 release/moc_deviceinfopage.o
 release/moc_devicepage.o

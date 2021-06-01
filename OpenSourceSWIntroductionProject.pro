@@ -33,10 +33,7 @@ SOURCES += \
     RGBController/RGBController_Dummy.cpp \
     RGBSync.cpp \
     cli.cpp \
-    dependencies/NVFC/nvapi.cpp \
-    dependencies/hidapi/hidapi.c \
     i2c_smbus/i2c_smbus.cpp \
-    i2c_smbus/i2c_smbus_piix4.cpp \
     i2c_tools/i2c_tools.cpp \
     main.cpp \
     qt/deviceinfopage.cpp \
@@ -47,8 +44,7 @@ SOURCES += \
     qt/rgbdialog02.cpp \
     qt/softwareinfopage.cpp \
     qt/systeminfopage.cpp \
-    qt/zoneresizedialog.cpp \
-    wmi/wmi.cpp
+    qt/zoneresizedialog.cpp
 
 HEADERS += \
     Controllers/AuraSMBusController/AuraSMBusController.h \
@@ -57,11 +53,7 @@ HEADERS += \
     RGBController/RGBController_AuraSMBus.h \
     RGBController/RGBController_Dummy.h \
     RGBSync.h \
-    dependencies/NVFC/nvapi.h \
-    dependencies/hidapi/hidapi/hidapi.h \
-    dependencies/inpout32_1501/Win32/inpout32.h \
     i2c_smbus/i2c_smbus.h \
-    i2c_smbus/i2c_smbus_piix4.h \
     i2c_tools/i2c_tools.h \
     qt/deviceinfopage.h \
     qt/devicepage.h \
@@ -70,8 +62,7 @@ HEADERS += \
     qt/rgbdialog02.h \
     qt/softwareinfopage.h \
     qt/systeminfopage.h \
-    qt/zoneresizedialog.h \
-    wmi/wmi.h
+    qt/zoneresizedialog.h
 
 FORMS += \
     qt/deviceinfopage.ui \

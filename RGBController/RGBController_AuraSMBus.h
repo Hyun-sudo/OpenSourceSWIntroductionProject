@@ -1,11 +1,7 @@
-/*-----------------------------------------*\
-|  RGBController_AuraSMBus.h                |
-|                                           |
-|  Generic RGB Interface for OpenAuraSDK    |
-|  Asus Aura SMBus driver                   |
-|                                           |
-|  Adam Honse (CalcProgrammer1) 6/13/2019   |
-\*-----------------------------------------*/
+/*
+ * RGBController_AuraSMBus.h
+ * Asus Aura SMBus 드라이버를 위한 제네릭 RGB 인터페이스
+*/
 
 #pragma once
 

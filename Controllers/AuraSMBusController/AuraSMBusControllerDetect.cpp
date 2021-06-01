@@ -6,20 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef WIN32
 #include <Windows.h>
-#else
-#include <unistd.h>
 
-static void Sleep(unsigned int milliseconds)
-{
-    usleep(1000 * milliseconds);
-}
-#endif
-
-/*----------------------------------------------------------------------*\
-| This list contains the available SMBus addresses for mapping Aura RAM  |
-\*----------------------------------------------------------------------*/
+// Aura RAM을 맵핑하는 데 가능한 SMBus 주소
 #define AURA_RAM_ADDRESS_COUNT  22
 
 static const unsigned char aura_ram_addresses[] =
@@ -48,9 +37,7 @@ static const unsigned char aura_ram_addresses[] =
     0x3D
 };
 
-/*---------------------------------------------------------------------------------*\
-| This list contains the available SMBus addresses for mapping Aura motherboards    |
-\*---------------------------------------------------------------------------------*/
+// Aura Motherboard를 맵핑하는 데 가능한 SMBus 주소
 #define AURA_MOBO_ADDRESS_COUNT 4
 
 static const unsigned char aura_mobo_addresses[] =
